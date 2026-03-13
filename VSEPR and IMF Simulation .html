@@ -1,0 +1,1352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IB DP Chemistry — Molecular Geometry & Bonding</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  /* Warm sage-cream soothing palette */
+  --bg:#F5F0E8;--bg2:#EDE8DE;--panel:#FDFAF5;--panel2:#F0EBE0;--panel3:#E8E0D0;
+  --b:rgba(120,100,70,0.12);--b2:rgba(120,100,70,0.2);--b3:rgba(120,100,70,0.35);
+  --t:#2C2416;--t2:#6B5B45;--t3:#9A8870;
+  --blue:#3A7CA8;--teal:#2E8B6A;--purple:#7A5FA0;--amber:#C8800A;
+  --green:#3E7A54;--red:#A04040;--coral:#B85030;--rose:#8A4060;
+  --ldf:#3A7CA8;--dd:#B85030;--hb:#A04040;--nc:#2E8B6A;--pi:#7A5FA0;
+  --font:'Nunito',sans-serif;--mono:'JetBrains Mono',monospace;
+  --shadow:0 2px 16px rgba(100,80,40,0.12);--shadow2:0 4px 28px rgba(100,80,40,0.18);
+  --r:12px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--t);min-height:100vh;overflow-x:hidden;font-size:15px}
+
+/* ── HEADER ── */
+header{
+  background:rgba(253,250,245,0.96);backdrop-filter:blur(12px);
+  padding:13px 28px;display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--b2);position:sticky;top:0;z-index:300;
+  box-shadow:0 1px 12px rgba(100,80,40,0.08);
+}
+.logo{display:flex;align-items:center;gap:12px}
+.logo-icon{width:36px;height:36px;background:linear-gradient(135deg,#3A5A7A,#2E7A5A);
+  border-radius:9px;display:flex;align-items:center;justify-content:center;
+  font-size:18px;border:1px solid rgba(255,255,255,.3);box-shadow:0 2px 10px rgba(60,90,120,0.25);}
+.logo-title{color:var(--t);font-size:15px;font-weight:800;letter-spacing:-0.2px}
+.logo-sub{color:var(--t3);font-size:11px;margin-top:1px;font-weight:500}
+.badge{background:rgba(58,124,168,0.1);border:1px solid rgba(58,124,168,.35);color:var(--blue);
+  font-size:11px;font-weight:800;padding:4px 12px;border-radius:20px;letter-spacing:.8px;text-transform:uppercase;}
+
+/* ── TAB NAV ── */
+.tab-nav{
+  background:var(--panel);border-bottom:1px solid var(--b2);
+  padding:0 28px;display:flex;gap:0;overflow-x:auto;
+  box-shadow:0 1px 6px rgba(100,80,40,0.05);
+}
+.tab-nav::-webkit-scrollbar{height:2px}
+.tnav-btn{
+  background:none;border:none;color:var(--t3);font-family:var(--font);
+  font-size:13px;font-weight:700;padding:13px 20px;cursor:pointer;white-space:nowrap;
+  border-bottom:3px solid transparent;transition:all .2s;letter-spacing:0.1px;
+}
+.tnav-btn:hover{color:var(--t2)}
+.tnav-btn.active{color:var(--blue);border-bottom-color:var(--blue)}
+
+/* ── SHARED LAYOUT ── */
+.sim-layout{display:grid;grid-template-columns:1fr 400px;height:calc(100vh - 92px);overflow:hidden}
+.canvas-wrap{position:relative;background:#F8F4EE;overflow:hidden;cursor:grab;border-right:1px solid var(--b)}
+.canvas-wrap:active{cursor:grabbing}
+.sim-canvas{width:100%;height:100%;display:block}
+.r-panel{background:var(--panel);display:flex;flex-direction:column;overflow-y:auto}
+.r-panel::-webkit-scrollbar{width:5px}
+.r-panel::-webkit-scrollbar-thumb{background:var(--b2);border-radius:3px}
+
+/* canvas overlays */
+.cv-ov{position:absolute;pointer-events:none}
+.cv-tags{top:14px;left:16px;display:flex;flex-direction:column;gap:6px}
+.cv-tag{display:inline-flex;align-items:center;gap:7px;backdrop-filter:blur(8px);
+  border-radius:7px;padding:5px 11px;font-size:12px;font-weight:700;border:1px solid;}
+.cv-tag.e{background:rgba(46,139,106,.1);border-color:rgba(46,139,106,.35);color:var(--teal)}
+.cv-tag.m{background:rgba(58,124,168,.1);border-color:rgba(58,124,168,.35);color:var(--blue)}
+.cv-dot{width:7px;height:7px;border-radius:50%}
+.cv-tag.e .cv-dot{background:var(--teal)}.cv-tag.m .cv-dot{background:var(--blue)}
+.cv-hint{bottom:12px;left:50%;transform:translateX(-50%);color:var(--t3);font-size:11px;
+  background:rgba(253,250,245,.88);padding:5px 14px;border-radius:8px;border:1px solid var(--b2);white-space:nowrap;font-weight:600;}
+.cv-btns{top:14px;right:14px;display:flex;flex-direction:column;gap:5px}
+.cv-btn{background:rgba(253,250,245,.92);border:1px solid var(--b2);color:var(--t2);font-family:var(--font);
+  font-size:12px;font-weight:700;padding:6px 11px;border-radius:7px;cursor:pointer;pointer-events:all;
+  transition:all .2s;backdrop-filter:blur(6px);box-shadow:var(--shadow);}
+.cv-btn:hover{border-color:var(--blue);color:var(--blue)}
+.cv-btn.on{background:rgba(58,124,168,.12);border-color:var(--blue);color:var(--blue)}
+
+/* panel sections */
+.ps{padding:18px 22px;border-bottom:1px solid var(--b)}
+.pl{font-size:10px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase;color:var(--t3);margin-bottom:11px}
+
+/* domain tabs */
+.dom-bar{background:var(--panel2);border-bottom:1px solid var(--b2);padding:9px 22px;display:flex;align-items:center;gap:7px;overflow-x:auto;}
+.dom-lbl{font-size:11px;color:var(--t3);font-weight:800;margin-right:5px;white-space:nowrap;text-transform:uppercase;letter-spacing:.5px;}
+.dtab{background:none;border:1px solid var(--b2);color:var(--t2);font-family:var(--font);
+  font-size:12px;font-weight:700;padding:5px 14px;border-radius:15px;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.dtab:hover{border-color:var(--blue);color:var(--blue)}
+.dtab.active{background:rgba(58,124,168,.12);border-color:var(--blue);color:var(--blue)}
+
+/* mol grid */
+.mol-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.mol-btn{background:var(--panel2);border:1px solid var(--b);color:var(--t2);font-family:var(--font);
+  font-size:12px;font-weight:600;padding:10px 12px;border-radius:9px;cursor:pointer;text-align:left;transition:all .2s;line-height:1.4;}
+.mol-btn:hover{border-color:var(--blue);color:var(--t)}
+.mol-btn.active{background:rgba(58,124,168,.1);border-color:var(--blue);color:var(--t)}
+.mb-f{font-family:var(--mono);font-size:10px;color:var(--t3);margin-top:2px;display:block}
+.mol-btn.active .mb-f{color:var(--blue)}
+.mb-l{font-size:10px;margin-top:2px;display:block;font-weight:600}
+.lp0{color:var(--green)}.lp1{color:var(--amber)}.lp2{color:var(--coral)}.lp3{color:var(--red)}
+
+/* geo cards */
+.geo-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:13px}
+.geo-card{background:var(--panel2);border-radius:10px;padding:12px 14px;border:1px solid var(--b)}
+.gc-t{font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:4px}
+.gc-t.e{color:var(--teal)}.gc-t.m{color:var(--blue)}
+.gc-n{font-size:15px;font-weight:800;color:var(--t);line-height:1.2}
+.gc-s{font-size:11px;color:var(--t3);margin-top:3px;font-weight:500}
+.stats-row{display:flex;gap:8px;margin-bottom:13px}
+.sc{flex:1;background:var(--panel2);border:1px solid var(--b);border-radius:9px;padding:10px 12px}
+.sc-l{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--t3);margin-bottom:3px;font-weight:700}
+.sc-v{font-size:18px;font-weight:800;font-family:var(--mono);color:var(--t);line-height:1}
+.sc-v.a{color:var(--amber)}.sc-v.tl{color:var(--teal)}.sc-v.p{color:var(--purple)}
+.ex-wrap{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}
+.ex-tag{background:rgba(62,122,84,.09);border:1px solid rgba(62,122,84,.28);
+  color:var(--green);font-family:var(--mono);font-size:11px;padding:3px 8px;border-radius:5px;font-weight:600}
+.desc-box{background:var(--panel2);border-left:3px solid var(--blue);
+  border-radius:0 9px 9px 0;padding:11px 14px;font-size:13px;color:var(--t2);line-height:1.75;font-weight:500}
+.rep-bar{background:var(--panel2);border-radius:9px;padding:12px 14px;border:1px solid var(--b)}
+.rep-row{display:flex;align-items:center;justify-content:center;gap:7px;font-family:var(--mono);font-size:12px;}
+.ri{padding:4px 11px;border-radius:5px;font-weight:700}
+.ri.lplp{background:rgba(122,95,160,.12);color:var(--purple);border:1px solid rgba(122,95,160,.3)}
+.ri.lpbp{background:rgba(200,128,10,.1);color:var(--amber);border:1px solid rgba(200,128,10,.28)}
+.ri.bpbp{background:rgba(58,124,168,.1);color:var(--blue);border:1px solid rgba(58,124,168,.28)}
+.gt{color:var(--t3);font-size:16px}
+.rep-cap{font-size:11px;color:var(--t3);text-align:center;margin-top:6px;font-weight:600}
+.rule-list{display:flex;flex-direction:column;gap:6px}
+.rule{display:flex;align-items:flex-start;gap:9px;background:var(--panel2);
+  border-radius:8px;padding:10px 12px;border:1px solid var(--b);font-size:13px;color:var(--t2);line-height:1.65;font-weight:500}
+.rn{min-width:18px;height:18px;border-radius:50%;background:rgba(58,124,168,.12);border:1px solid rgba(58,124,168,.35);
+  color:var(--blue);font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.lp-leg{display:flex;flex-direction:column;gap:7px}
+.lp-row{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--t2);font-weight:500}
+.ls{width:15px;height:15px;border-radius:50%;flex-shrink:0}
+.ip-foot{margin-top:auto;padding:13px 22px;border-top:1px solid var(--b)}
+.ip-foot p{font-size:11px;color:var(--t3);line-height:1.8;font-weight:600}
+
+/* ── GIANT STRUCTURES ── */
+.giant-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.g-btn{background:var(--panel2);border:1px solid var(--b);color:var(--t2);font-family:var(--font);
+  font-size:12px;font-weight:600;padding:11px 13px;border-radius:10px;cursor:pointer;text-align:left;transition:all .2s;line-height:1.5;}
+.g-btn:hover{border-color:var(--blue);color:var(--t)}
+.g-btn.active{background:rgba(58,124,168,.1);border-color:var(--blue);color:var(--t)}
+.gb-type{font-size:10px;color:var(--t3);margin-top:2px;display:block}
+.g-btn.active .gb-type{color:var(--blue)}
+.prop-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.prop-card{background:var(--panel2);border:1px solid var(--b);border-radius:9px;padding:10px 13px}
+.pc-l{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px;font-weight:700}
+.pc-v{font-size:13px;font-weight:600;color:var(--t);line-height:1.4}
+.imf-chip{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:7px;
+  font-size:12px;font-weight:700;margin-top:4px;margin-right:4px;margin-bottom:4px}
+.imf-chip.ld{background:rgba(58,124,168,.1);border:1px solid rgba(58,124,168,.3);color:var(--blue)}
+.imf-chip.dd{background:rgba(184,80,48,.1);border:1px solid rgba(184,80,48,.3);color:var(--coral)}
+.imf-chip.hb{background:rgba(160,64,64,.1);border:1px solid rgba(160,64,64,.3);color:var(--red)}
+.imf-chip.nc{background:rgba(46,139,106,.1);border:1px solid rgba(46,139,106,.3);color:var(--teal)}
+.imf-chip.pi{background:rgba(122,95,160,.1);border:1px solid rgba(122,95,160,.3);color:var(--purple)}
+
+/* ── CUSTOM BUILDER ── */
+#tab-builder{display:none}
+.builder-layout{display:grid;grid-template-columns:310px 1fr 340px;height:calc(100vh - 92px);overflow:hidden}
+.builder-form{background:var(--panel);border-right:1px solid var(--b);overflow-y:auto;padding:22px}
+.builder-form::-webkit-scrollbar{width:4px}
+.builder-form::-webkit-scrollbar-thumb{background:var(--b2)}
+.bf-title{font-size:15px;font-weight:800;color:var(--t);margin-bottom:18px;}
+.bf-group{margin-bottom:18px}
+.bf-label{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:7px;display:block;font-weight:800}
+.el-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+.el-btn{background:var(--panel2);border:1px solid var(--b);color:var(--t2);font-family:var(--mono);
+  font-size:13px;font-weight:600;padding:8px 4px;border-radius:7px;cursor:pointer;text-align:center;transition:all .2s;}
+.el-btn:hover{border-color:var(--blue);color:var(--t)}
+.el-btn.active{background:rgba(58,124,168,.15);border-color:var(--blue);color:var(--blue)}
+.el-btn .el-p{font-size:9px;color:inherit;opacity:.6;display:block;margin-top:1px}
+.stepper{display:flex;align-items:center;gap:0;border:1px solid var(--b2);border-radius:9px;overflow:hidden}
+.step-btn{background:var(--panel2);border:none;color:var(--t2);font-family:var(--mono);font-size:20px;
+  width:40px;height:40px;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;font-weight:300}
+.step-btn:hover{background:rgba(58,124,168,.12);color:var(--blue)}
+.step-val{flex:1;text-align:center;font-family:var(--mono);font-size:21px;font-weight:800;
+  color:var(--t);background:var(--panel3);padding:0 10px;height:40px;display:flex;align-items:center;justify-content:center;}
+.validity-box{border-radius:10px;padding:13px 15px;margin-bottom:13px;font-size:13px;line-height:1.6;font-weight:600}
+.vb-valid{background:rgba(62,122,84,.09);border:1px solid rgba(62,122,84,.3);color:var(--green)}
+.vb-warn{background:rgba(200,128,10,.08);border:1px solid rgba(200,128,10,.3);color:var(--amber)}
+.vb-invalid{background:rgba(160,64,64,.08);border:1px solid rgba(160,64,64,.3);color:var(--red)}
+.formula-display{font-family:var(--mono);font-size:30px;font-weight:800;color:var(--t);
+  text-align:center;padding:18px;background:var(--panel2);border-radius:10px;border:1px solid var(--b);margin-bottom:11px}
+.geometry-big{text-align:center;font-size:20px;font-weight:800;color:var(--blue);margin-bottom:5px}
+.fc-display{text-align:center;font-size:13px;color:var(--t2);font-family:var(--mono);font-weight:600}
+
+/* ── IMF GUIDE ── */
+#tab-imf{display:none;overflow-y:auto;height:calc(100vh - 92px);background:var(--bg)}
+.imf-content{max-width:1100px;margin:0 auto;padding:36px 28px}
+.imf-h{font-size:28px;font-weight:800;color:var(--t);margin-bottom:6px;letter-spacing:-0.5px}
+.imf-sub{font-size:14px;color:var(--t2);margin-bottom:36px;line-height:1.75;max-width:740px;font-weight:500}
+
+/* IMF Cards */
+.imf-sim-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:22px;margin-bottom:40px}
+.imf-sim-card{background:var(--panel);border:1px solid var(--b2);border-radius:16px;overflow:hidden;box-shadow:var(--shadow2)}
+.imf-sim-header{padding:16px 20px 12px;border-bottom:1px solid var(--b)}
+.imf-sim-title{font-size:15px;font-weight:800;margin-bottom:3px;letter-spacing:-0.2px}
+.imf-sim-sub{font-size:11px;color:var(--t3);line-height:1.5;font-weight:600}
+.imf-sim-canvas-wrap{position:relative;height:200px;background:var(--bg2)}
+.imf-sim-canvas{width:100%;height:100%;display:block}
+.imf-sim-body{padding:14px 20px 18px}
+
+.imf-sim-card.ld .imf-sim-title{color:var(--ldf)}
+.imf-sim-card.dd .imf-sim-title{color:var(--dd)}
+.imf-sim-card.hb .imf-sim-title{color:var(--hb)}
+.imf-sim-card.nc .imf-sim-title{color:var(--nc)}
+.imf-sim-card.pi .imf-sim-title{color:var(--pi)}
+.imf-sim-card.ld .imf-sim-header{background:rgba(58,124,168,.07);border-bottom-color:rgba(58,124,168,.2)}
+.imf-sim-card.dd .imf-sim-header{background:rgba(184,80,48,.07);border-bottom-color:rgba(184,80,48,.2)}
+.imf-sim-card.hb .imf-sim-header{background:rgba(160,64,64,.07);border-bottom-color:rgba(160,64,64,.2)}
+.imf-sim-card.nc .imf-sim-header{background:rgba(46,139,106,.07);border-bottom-color:rgba(46,139,106,.2)}
+.imf-sim-card.pi .imf-sim-header{background:rgba(122,95,160,.07);border-bottom-color:rgba(122,95,160,.2)}
+
+/* Bullet points */
+.imf-bullets{list-style:none;display:flex;flex-direction:column;gap:6px}
+.imf-bullets li{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--t2);line-height:1.6;font-weight:500}
+.imf-bullets li::before{content:'';min-width:6px;height:6px;border-radius:50%;margin-top:7px;flex-shrink:0}
+.imf-sim-card.ld .imf-bullets li::before{background:var(--ldf)}
+.imf-sim-card.dd .imf-bullets li::before{background:var(--dd)}
+.imf-sim-card.hb .imf-bullets li::before{background:var(--hb)}
+.imf-sim-card.nc .imf-bullets li::before{background:var(--nc)}
+.imf-sim-card.pi .imf-bullets li::before{background:var(--pi)}
+.str-card-imf .imf-bullets li::before{background:var(--amber)}
+.imf-eg{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+.imf-tag{display:inline-block;background:var(--panel2);border:1px solid var(--b2);
+  font-family:var(--mono);font-size:11px;font-weight:600;padding:2px 8px;border-radius:4px;color:var(--t2)}
+
+/* Section headers */
+.section-hd{font-size:20px;font-weight:800;color:var(--t);margin-bottom:16px;letter-spacing:-0.3px;padding-top:4px}
+.table-section{background:var(--panel);border:1px solid var(--b2);border-radius:16px;overflow:hidden;margin-bottom:28px;box-shadow:var(--shadow)}
+.table-section-header{padding:16px 22px;border-bottom:1px solid var(--b);background:var(--panel2)}
+.table-section-title{font-size:16px;font-weight:800;color:var(--t)}
+.bp-table{width:100%;border-collapse:collapse;font-size:13px}
+.bp-table th{background:var(--panel2);color:var(--t2);padding:10px 14px;text-align:left;
+  font-weight:800;border-bottom:1px solid var(--b);font-size:11px;letter-spacing:.6px;text-transform:uppercase}
+.bp-table td{padding:9px 14px;border-bottom:1px solid var(--b);color:var(--t2);font-size:13px;font-weight:500}
+.bp-table tr:last-child td{border-bottom:none}
+.bp-table tr:hover td{background:rgba(120,100,70,.03);color:var(--t)}
+.str-cmp{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px;margin-bottom:40px}
+.str-card{background:var(--panel);border:1px solid var(--b2);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow)}
+.str-n{font-size:14px;font-weight:800;color:var(--t);margin-bottom:8px}
+.str-bullets{list-style:none;display:flex;flex-direction:column;gap:5px}
+.str-bullets li{display:flex;align-items:flex-start;gap:7px;font-size:12px;color:var(--t2);line-height:1.5;font-weight:500}
+.str-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:4px}
+
+/* responsive */
+@media(max-width:1050px){
+  .sim-layout{grid-template-columns:1fr;grid-template-rows:420px 1fr;height:auto}
+  .r-panel{border-left:none;border-top:1px solid var(--b)}
+  .builder-layout{grid-template-columns:1fr;grid-template-rows:auto 380px auto;height:auto}
+  .str-cmp{grid-template-columns:1fr 1fr}
+}
+@media(max-width:640px){
+  .sim-layout{grid-template-rows:360px 1fr}
+  .mol-grid,.giant-grid{grid-template-columns:1fr}
+  .el-grid{grid-template-columns:repeat(5,1fr)}
+  .stats-row{flex-wrap:wrap}
+  .imf-sim-grid{grid-template-columns:1fr}
+  .str-cmp{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">⚛</div>
+    <div>
+      <div class="logo-title">IB DP Chemistry — Molecular Geometry & Bonding</div>
+      <div class="logo-sub">VSEPR · Giant Structures · Custom Builder · Intermolecular Forces</div>
+    </div>
+  </div>
+  <div class="badge">IB DP</div>
+</header>
+
+<nav class="tab-nav">
+  <button class="tnav-btn active" onclick="switchTab('vsepr')">⬡ VSEPR Molecules</button>
+  <button class="tnav-btn" onclick="switchTab('giant')">◈ Giant Structures</button>
+  <button class="tnav-btn" onclick="switchTab('builder')">✦ Custom Builder</button>
+  <button class="tnav-btn" onclick="switchTab('imf')">≈ IMF Guide</button>
+</nav>
+
+<!-- ══ TAB 1: VSEPR ══ -->
+<div id="tab-vsepr">
+  <div class="dom-bar">
+    <span class="dom-lbl">Electron Domains:</span>
+    <button class="dtab" onclick="setDomain(2)">2 Domains</button>
+    <button class="dtab" onclick="setDomain(3)">3 Domains</button>
+    <button class="dtab active" onclick="setDomain(4)">4 Domains</button>
+    <button class="dtab" onclick="setDomain(5)">5 Domains</button>
+    <button class="dtab" onclick="setDomain(6)">6 Domains</button>
+  </div>
+  <div class="sim-layout">
+    <div class="canvas-wrap" id="vsepr-wrap">
+      <canvas class="sim-canvas" id="vsepr-cvs"></canvas>
+      <div class="cv-ov cv-tags">
+        <div class="cv-tag e"><div class="cv-dot"></div><span>Electron: <strong id="v-egeo">Tetrahedral</strong></span></div>
+        <div class="cv-tag m"><div class="cv-dot"></div><span>Molecular: <strong id="v-mgeo">Tetrahedral</strong></span></div>
+      </div>
+      <div class="cv-ov cv-btns">
+        <button class="cv-btn on" id="vbtn-rot" onclick="toggleVOpt('rot')">⟳ Rotate</button>
+        <button class="cv-btn on" id="vbtn-lp" onclick="toggleVOpt('lp')">◉ Lone Pairs</button>
+        <button class="cv-btn on" id="vbtn-ang" onclick="toggleVOpt('ang')">∠ Angles</button>
+      </div>
+      <div class="cv-ov cv-hint">Drag to rotate · Scroll to zoom</div>
+    </div>
+    <div class="r-panel" id="vsepr-panel">
+      <div class="ps"><div class="pl">Select Molecule</div><div class="mol-grid" id="mol-grid"></div></div>
+      <div class="ps">
+        <div class="pl">Geometry</div>
+        <div class="geo-row">
+          <div class="geo-card"><div class="gc-t e">Electron Domain</div><div class="gc-n" id="eg-n">Tetrahedral</div><div class="gc-s" id="eg-s">4 domains</div></div>
+          <div class="geo-card"><div class="gc-t m">Molecular Shape</div><div class="gc-n" id="mg-n">Tetrahedral</div><div class="gc-s" id="mg-s">0 lone pairs</div></div>
+        </div>
+        <div class="stats-row">
+          <div class="sc"><div class="sc-l">Bond Angle</div><div class="sc-v a" id="sc-ang">109.5°</div></div>
+          <div class="sc"><div class="sc-l">Formula</div><div class="sc-v tl" id="sc-form" style="font-size:14px">AX₄</div></div>
+          <div class="sc"><div class="sc-l">Lone Pairs</div><div class="sc-v p" id="sc-lp">0</div></div>
+        </div>
+        <div class="pl">Common Examples</div><div class="ex-wrap" id="v-ex"></div>
+      </div>
+      <div class="ps"><div class="pl">Description</div><div class="desc-box" id="v-desc"></div></div>
+      <div class="ps">
+        <div class="pl">Atom Key</div>
+        <div class="lp-leg">
+          <div class="lp-row"><div class="ls" style="background:#B8B8B0;border:1px solid #888"></div>Central atom (A) — all bonding pairs radiate from here</div>
+          <div class="lp-row"><div class="ls" style="background:#4A90C0"></div>Terminal atom (X) — bonded to central atom</div>
+          <div class="lp-row"><div class="ls" style="background:rgba(122,95,160,.45);border:1px dashed var(--purple)"></div>Lone pair (E) — non-bonding electron domain</div>
+        </div>
+      </div>
+      <div class="ps">
+        <div class="pl">Repulsion Order</div>
+        <div class="rep-bar">
+          <div class="rep-row"><div class="ri lplp">LP–LP</div><div class="gt">›</div><div class="ri lpbp">LP–BP</div><div class="gt">›</div><div class="ri bpbp">BP–BP</div></div>
+          <div class="rep-cap">Lone pairs occupy more space → compress bond angles</div>
+        </div>
+      </div>
+      <div class="ps">
+        <div class="pl">VSEPR Rules</div>
+        <div class="rule-list">
+          <div class="rule"><div class="rn">1</div>All electron domains repel each other and maximise the angles between them.</div>
+          <div class="rule"><div class="rn">2</div>Molecular geometry only counts bonding pairs — lone pairs are invisible in the shape name.</div>
+          <div class="rule"><div class="rn">3</div>Lone pairs repel more strongly → compress bond angles below the ideal value.</div>
+          <div class="rule"><div class="rn">4</div>In trigonal bipyramidal geometry: lone pairs always prefer equatorial positions.</div>
+        </div>
+      </div>
+      <div class="ip-foot"><p>IB DP Chemistry · Topic 14 (HL) · VSEPR Theory</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TAB 2: GIANT STRUCTURES ══ -->
+<div id="tab-giant" style="display:none">
+  <div class="sim-layout" style="grid-template-columns:1fr 400px">
+    <div class="canvas-wrap" id="giant-wrap">
+      <canvas class="sim-canvas" id="giant-cvs"></canvas>
+      <div class="cv-ov cv-tags">
+        <div class="cv-tag e"><div class="cv-dot"></div><span>Type: <strong id="g-type">Giant Covalent</strong></span></div>
+        <div class="cv-tag m"><div class="cv-dot"></div><span>Coord. no.: <strong id="g-coord">4</strong></span></div>
+      </div>
+      <div class="cv-ov cv-btns">
+        <button class="cv-btn on" id="gbtn-rot" onclick="toggleGOpt('rot')">⟳ Rotate</button>
+        <button class="cv-btn on" id="gbtn-ext" onclick="toggleGOpt('ext')">⊞ Extended</button>
+      </div>
+      <div class="cv-ov cv-hint">Drag to rotate · Scroll to zoom</div>
+    </div>
+    <div class="r-panel" id="giant-panel">
+      <div class="ps"><div class="pl">Select Structure</div>
+        <div class="giant-grid">
+          <button class="g-btn active" onclick="selectGiant('diamond')">Diamond<span class="gb-type">Giant covalent · C</span></button>
+          <button class="g-btn" onclick="selectGiant('graphite')">Graphite<span class="gb-type">Giant covalent · layered C</span></button>
+          <button class="g-btn" onclick="selectGiant('c60')">Buckminsterfullerene<span class="gb-type">Molecular · C₆₀</span></button>
+          <button class="g-btn" onclick="selectGiant('sio2')">Silicon Dioxide<span class="gb-type">Giant covalent · SiO₂</span></button>
+          <button class="g-btn" onclick="selectGiant('silicon')">Silicon<span class="gb-type">Giant covalent · Si</span></button>
+        </div>
+      </div>
+      <div class="ps"><div class="pl">Properties</div><div class="prop-grid" id="g-props"></div></div>
+      <div class="ps"><div class="pl">Bonding</div><div class="desc-box" id="g-desc"></div></div>
+      <div class="ps"><div class="pl">Forces Present</div><div id="g-imf"></div></div>
+      <div class="ps"><div class="pl">Structure → Properties</div><div class="desc-box" id="g-svp" style="border-color:var(--teal)"></div></div>
+      <div class="ip-foot"><p>IB DP Chemistry · Topic 14 · Giant Covalent & Molecular Solids</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TAB 3: CUSTOM BUILDER ══ -->
+<div id="tab-builder">
+  <div class="builder-layout">
+    <div class="builder-form">
+      <div class="bf-title">Build a Molecule</div>
+      <div class="bf-group"><span class="bf-label">Central Element</span><div class="el-grid" id="el-grid"></div></div>
+      <div class="bf-group"><span class="bf-label">Bonding Pairs (BP)</span>
+        <div class="stepper"><button class="step-btn" onclick="adjustBP(-1)">−</button><div class="step-val" id="bp-val">4</div><button class="step-btn" onclick="adjustBP(1)">+</button></div>
+      </div>
+      <div class="bf-group"><span class="bf-label">Lone Pairs (LP)</span>
+        <div class="stepper"><button class="step-btn" onclick="adjustLP(-1)">−</button><div class="step-val" id="lp-val">0</div><button class="step-btn" onclick="adjustLP(1)">+</button></div>
+      </div>
+      <div class="bf-group"><span class="bf-label">Terminal Element</span><div class="el-grid" id="term-el-grid"></div></div>
+      <div class="validity-box vb-valid" id="validity-box">Select a configuration to begin.</div>
+      <div style="margin-top:8px">
+        <div class="pl" style="margin-bottom:7px">VSEPR Notation</div>
+        <div class="formula-display" id="bld-formula">AX₄</div>
+        <div class="geometry-big" id="bld-geo">Tetrahedral</div>
+        <div class="fc-display" id="bld-fc">Formal charge: 0</div>
+      </div>
+    </div>
+    <div class="canvas-wrap" id="builder-wrap">
+      <canvas class="sim-canvas" id="builder-cvs"></canvas>
+      <div class="cv-ov cv-tags"><div class="cv-tag m"><div class="cv-dot"></div><span>Shape: <strong id="b-mgeo">Tetrahedral</strong></span></div></div>
+      <div class="cv-ov cv-btns">
+        <button class="cv-btn on" id="bbtn-rot" onclick="toggleBOpt('rot')">⟳ Rotate</button>
+        <button class="cv-btn on" id="bbtn-lp" onclick="toggleBOpt('lp')">◉ Lone Pairs</button>
+      </div>
+      <div class="cv-ov cv-hint">Drag to rotate · Scroll to zoom</div>
+    </div>
+    <div class="r-panel" id="builder-results">
+      <div class="ps"><div class="pl">Geometry Result</div>
+        <div class="geo-row">
+          <div class="geo-card"><div class="gc-t e">Electron Domain</div><div class="gc-n" id="b-egeo">Tetrahedral</div><div class="gc-s" id="b-edoms">4 domains</div></div>
+          <div class="geo-card"><div class="gc-t m">Molecular</div><div class="gc-n" id="b-mgeo2">Tetrahedral</div><div class="gc-s" id="b-lps">0 lone pairs</div></div>
+        </div>
+        <div class="stats-row">
+          <div class="sc"><div class="sc-l">Bond Angle</div><div class="sc-v a" id="b-ang">109.5°</div></div>
+          <div class="sc"><div class="sc-l">Polarity</div><div class="sc-v tl" id="b-pol" style="font-size:13px">Non-polar</div></div>
+        </div>
+      </div>
+      <div class="ps"><div class="pl">Examples</div><div class="ex-wrap" id="b-ex"></div><div class="desc-box" style="margin-top:9px" id="b-desc"></div></div>
+      <div class="ps"><div class="pl">Validity Analysis</div><div class="rule-list" id="b-analysis"></div></div>
+      <div class="ip-foot"><p>FC = V − 2LP − BP · VSEPR Theory</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TAB 4: IMF GUIDE ══ -->
+<div id="tab-imf">
+  <div class="imf-content">
+    <div class="imf-h">Intermolecular Forces</div>
+    <div class="imf-sub">Forces acting <em>between</em> molecules — weaker than covalent bonds, but they govern boiling point, melting point, viscosity, and solubility. Each animation below shows electron cloud movement at the molecular scale.</div>
+
+    <div class="imf-sim-grid">
+
+      <!-- LDF -->
+      <div class="imf-sim-card ld">
+        <div class="imf-sim-header">
+          <div class="imf-sim-title">⚡ London Dispersion Forces (LDF)</div>
+          <div class="imf-sim-sub">All atoms & molecules · Instantaneous dipole → induced dipole</div>
+        </div>
+        <div class="imf-sim-canvas-wrap"><canvas id="cvs-ldf" class="imf-sim-canvas"></canvas></div>
+        <div class="imf-sim-body">
+          <ul class="imf-bullets">
+            <li>Electron clouds constantly fluctuate, creating a momentary δ+/δ− on each atom</li>
+            <li>This instantaneous dipole induces an opposite dipole in the neighbour</li>
+            <li>Strength ↑ with more electrons, higher molar mass, and greater surface area</li>
+            <li>Branching reduces surface area → weaker LDF (e.g. neopentane vs pentane)</li>
+          </ul>
+          <div class="imf-eg"><span class="imf-tag">He</span><span class="imf-tag">Ar</span><span class="imf-tag">I₂</span><span class="imf-tag">CH₄</span><span class="imf-tag">C₆₀</span><span class="imf-tag">C₈H₁₈</span></div>
+        </div>
+      </div>
+
+      <!-- Dipole-Dipole -->
+      <div class="imf-sim-card dd">
+        <div class="imf-sim-header">
+          <div class="imf-sim-title">🔗 Permanent Dipole–Dipole</div>
+          <div class="imf-sim-sub">Polar molecules only · Requires net molecular dipole ≠ 0</div>
+        </div>
+        <div class="imf-sim-canvas-wrap"><canvas id="cvs-dd" class="imf-sim-canvas"></canvas></div>
+        <div class="imf-sim-body">
+          <ul class="imf-bullets">
+            <li>Unequal sharing of electrons creates a permanent δ+ and δ− end</li>
+            <li>Requires polar bonds AND asymmetric geometry (dipoles must not cancel)</li>
+            <li>Molecules align δ+ of one toward δ− of the next</li>
+            <li>Stronger than LDF for similar-sized molecules</li>
+          </ul>
+          <div class="imf-eg"><span class="imf-tag">HCl</span><span class="imf-tag">SO₂</span><span class="imf-tag">H₂S</span><span class="imf-tag">CHCl₃</span><span class="imf-tag">PCl₃</span></div>
+        </div>
+      </div>
+
+      <!-- Hydrogen Bonding -->
+      <div class="imf-sim-card hb">
+        <div class="imf-sim-header">
+          <div class="imf-sim-title">💧 Hydrogen Bonding</div>
+          <div class="imf-sim-sub">H bonded to N, O, or F only · Strongest intermolecular force</div>
+        </div>
+        <div class="imf-sim-canvas-wrap"><canvas id="cvs-hb" class="imf-sim-canvas"></canvas></div>
+        <div class="imf-sim-body">
+          <ul class="imf-bullets">
+            <li>H bonded to N, O, or F becomes very strongly δ+ (small, electronegative atoms)</li>
+            <li>δ+ H is attracted to a lone pair on N, O, or F of a neighbouring molecule</li>
+            <li>Water has 4 H-bond sites (2 donors + 2 acceptors) → exceptionally high BP</li>
+            <li>Explains anomalous properties: high BP of H₂O, ice less dense than water</li>
+          </ul>
+          <div class="imf-eg"><span class="imf-tag">H₂O</span><span class="imf-tag">NH₃</span><span class="imf-tag">HF</span><span class="imf-tag">DNA</span><span class="imf-tag">proteins</span></div>
+        </div>
+      </div>
+
+      <!-- Network Covalent -->
+      <div class="imf-sim-card nc">
+        <div class="imf-sim-header">
+          <div class="imf-sim-title">🔷 Network Covalent Bonding</div>
+          <div class="imf-sim-sub">Giant lattice · No discrete molecules exist</div>
+        </div>
+        <div class="imf-sim-canvas-wrap"><canvas id="cvs-nc" class="imf-sim-canvas"></canvas></div>
+        <div class="imf-sim-body">
+          <ul class="imf-bullets">
+            <li>Every atom is covalently bonded to all neighbours in one continuous network</li>
+            <li>The entire solid = one giant macromolecule (no intermolecular forces)</li>
+            <li>Melting requires breaking many covalent bonds → extremely high MP/BP</li>
+            <li>Hard and insoluble; poor conductors (except graphite)</li>
+          </ul>
+          <div class="imf-eg"><span class="imf-tag">Diamond</span><span class="imf-tag">SiO₂</span><span class="imf-tag">Silicon</span><span class="imf-tag">SiC</span></div>
+        </div>
+      </div>
+
+      <!-- Delocalised Pi -->
+      <div class="imf-sim-card pi">
+        <div class="imf-sim-header">
+          <div class="imf-sim-title">⚡ Delocalised π Electrons (Graphite)</div>
+          <div class="imf-sim-sub">σ bonds in-layer · VdW between layers · π enables conduction</div>
+        </div>
+        <div class="imf-sim-canvas-wrap"><canvas id="cvs-pi" class="imf-sim-canvas"></canvas></div>
+        <div class="imf-sim-body">
+          <ul class="imf-bullets">
+            <li>Each C makes 3 σ bonds (trigonal planar, 120°) in a flat hexagonal layer</li>
+            <li>4th electron joins a delocalised π cloud above/below the layer → conducts electricity</li>
+            <li>Layers held together by weak London dispersion forces only → soft, lubricant</li>
+            <li>Layers can slide over each other easily → marks paper, used in pencils</li>
+          </ul>
+          <div class="imf-eg"><span class="imf-tag">Graphite</span><span class="imf-tag">Benzene</span><span class="imf-tag">Graphene</span></div>
+        </div>
+      </div>
+
+      <!-- Strength Comparison -->
+      <div class="imf-sim-card str-card-imf" style="border-color:var(--b2)">
+        <div class="imf-sim-header" style="background:rgba(200,128,10,.07);border-bottom-color:rgba(200,128,10,.2)">
+          <div class="imf-sim-title" style="color:var(--amber)">📊 Relative Strength</div>
+          <div class="imf-sim-sub">Approximate energy ranges — varies with molecule size</div>
+        </div>
+        <div class="imf-sim-canvas-wrap"><canvas id="cvs-str" class="imf-sim-canvas"></canvas></div>
+        <div class="imf-sim-body">
+          <ul class="imf-bullets" style="--dot-col:var(--amber)">
+            <li>Network covalent &gt; H-bonding &gt; Dipole–dipole &gt; London dispersion</li>
+            <li>Large non-polar molecules (e.g. I₂, C₈H₁₈) can have stronger LDF than small polar ones</li>
+            <li>Key rule: more electrons + larger surface area = stronger LDF</li>
+            <li>Higher IMF → higher boiling point, higher viscosity, lower vapour pressure</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Boiling Point Table -->
+    <div class="table-section">
+      <div class="table-section-header"><div class="table-section-title">Boiling Point Comparison</div></div>
+      <table class="bp-table">
+        <tr><th>Substance</th><th>IMF Type(s)</th><th>Mᵣ</th><th>BP (°C)</th><th>Key reason</th></tr>
+        <tr><td>He</td><td>LDF only</td><td>4</td><td>−269</td><td>Minimal electrons → weakest LDF possible</td></tr>
+        <tr><td>Ar</td><td>LDF only</td><td>40</td><td>−186</td><td>More electrons → stronger LDF than He</td></tr>
+        <tr><td>CH₄</td><td>LDF only</td><td>16</td><td>−161</td><td>Non-polar — LDF only, small molecule</td></tr>
+        <tr><td>HCl</td><td>LDF + Dipole–dipole</td><td>36.5</td><td>−85</td><td>Polar, but Cl too large for H-bonding</td></tr>
+        <tr><td>H₂S</td><td>LDF + Dipole–dipole</td><td>34</td><td>−60</td><td>Polar + heavier; S too large for H-bonding</td></tr>
+        <tr><td>NH₃</td><td>LDF + Dipole + H-bond</td><td>17</td><td>−33</td><td>H-bonding raises BP above H₂S despite lower Mᵣ</td></tr>
+        <tr><td>HF</td><td>LDF + Dipole + H-bond</td><td>20</td><td>+19</td><td>Strong H-bonds — anomalously high BP</td></tr>
+        <tr><td>H₂O</td><td>LDF + Dipole + H-bond</td><td>18</td><td>+100</td><td>2 H-bond donors + 2 acceptors per molecule</td></tr>
+        <tr><td>C₆₀</td><td>LDF only (molecular)</td><td>720</td><td>~600 (sub.)</td><td>Enormous Mᵣ → very strong LDF despite non-polar</td></tr>
+        <tr><td>Graphite</td><td>Network covalent + LDF</td><td>∞</td><td>3652</td><td>Covalent network within layers</td></tr>
+        <tr><td>Diamond</td><td>Network covalent (3D)</td><td>∞</td><td>3550</td><td>Strongest 3D covalent network</td></tr>
+        <tr><td>SiO₂</td><td>Network covalent (3D)</td><td>∞</td><td>2230</td><td>Si–O bonds weaker than C–C in diamond</td></tr>
+      </table>
+    </div>
+
+    <div class="section-hd">Carbon Allotrope Comparison</div>
+    <div class="str-cmp">
+      <div class="str-card">
+        <div class="str-n">💎 Diamond</div>
+        <ul class="str-bullets">
+          <li><div class="str-dot" style="background:var(--blue)"></div>Giant covalent 3D network — one macromolecule</li>
+          <li><div class="str-dot" style="background:var(--green)"></div>Hardest natural substance (Mohs 10)</li>
+          <li><div class="str-dot" style="background:var(--red)"></div>Electrical insulator — no free electrons</li>
+          <li><div class="str-dot" style="background:var(--amber)"></div>Tetrahedral C atoms, all σ bonds, 109.5°</li>
+          <li><div class="str-dot" style="background:var(--t3)"></div>BP: 3550°C — all bonds must break to melt</li>
+        </ul>
+      </div>
+      <div class="str-card">
+        <div class="str-n">✏️ Graphite</div>
+        <ul class="str-bullets">
+          <li><div class="str-dot" style="background:var(--teal)"></div>Giant covalent 2D layers — hexagonal sheets</li>
+          <li><div class="str-dot" style="background:var(--green)"></div>Soft, marks paper — layers slide (VdW)</li>
+          <li><div class="str-dot" style="background:var(--amber)"></div>Electrical conductor — delocalised π electrons</li>
+          <li><div class="str-dot" style="background:var(--blue)"></div>Trigonal planar C, 120° angles, σ + π bonds</li>
+          <li><div class="str-dot" style="background:var(--t3)"></div>VdW between layers only (~335 pm spacing)</li>
+        </ul>
+      </div>
+      <div class="str-card">
+        <div class="str-n">⚽ Buckminsterfullerene C₆₀</div>
+        <ul class="str-bullets">
+          <li><div class="str-dot" style="background:var(--t2)"></div>Molecular solid — discrete C₆₀ molecules</li>
+          <li><div class="str-dot" style="background:var(--green)"></div>Soluble in non-polar solvents (like dissolves like)</li>
+          <li><div class="str-dot" style="background:var(--amber)"></div>Can superconduct when doped with K</li>
+          <li><div class="str-dot" style="background:var(--blue)"></div>20 hexagonal + 12 pentagonal faces</li>
+          <li><div class="str-dot" style="background:var(--red)"></div>Only LDF between molecules → lower MP ~600°C</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════════════════════════════════════════
+const VSEPR=[
+  {id:'lin2',d:2,bp:2,lp:0,eG:'Linear',mG:'Linear',ang:'180°',form:'AX₂',ex:['BeCl₂','CO₂','CS₂','HCN'],desc:'Two bonding pairs maximise separation at 180°, directly opposite each other. No lone pairs — electron and molecular geometry are identical.'},
+  {id:'tp3',d:3,bp:3,lp:0,eG:'Trigonal Planar',mG:'Trigonal Planar',ang:'120°',form:'AX₃',ex:['BF₃','BCl₃','SO₃','NO₃⁻'],desc:'Three bonding pairs form a flat equilateral triangle. All atoms lie in one plane; bond angles are exactly 120°.'},
+  {id:'bent3',d:3,bp:2,lp:1,eG:'Trigonal Planar',mG:'Bent',ang:'~117°',form:'AX₂E',ex:['SO₂','O₃','SnCl₂'],desc:'Electron geometry is trigonal planar, but one domain is a lone pair. Greater LP repulsion compresses bond angle from 120° to ~117°.'},
+  {id:'tet4',d:4,bp:4,lp:0,eG:'Tetrahedral',mG:'Tetrahedral',ang:'109.5°',form:'AX₄',ex:['CH₄','CCl₄','SiH₄','NH₄⁺'],desc:'Four identical bonding pairs form a regular tetrahedron. All bond angles are exactly 109.5°.'},
+  {id:'tpy4',d:4,bp:3,lp:1,eG:'Tetrahedral',mG:'Trigonal Pyramidal',ang:'~107°',form:'AX₃E',ex:['NH₃','PH₃','PCl₃','NF₃'],desc:'One tetrahedral vertex is a lone pair. Its greater repulsion compresses the three bonds from 109.5° to ~107°.'},
+  {id:'bent4',d:4,bp:2,lp:2,eG:'Tetrahedral',mG:'Bent',ang:'~104.5°',form:'AX₂E₂',ex:['H₂O','H₂S','OF₂','SCl₂'],desc:"Two lone pairs compress bond angle to ~104.5° — smallest in the tetrahedral family. Water's bent shape is crucial for hydrogen bonding."},
+  {id:'tbp5',d:5,bp:5,lp:0,eG:'Trigonal Bipyramidal',mG:'Trigonal Bipyramidal',ang:'90°/120°',form:'AX₅',ex:['PCl₅','PF₅','AsF₅'],desc:'Five domains produce axial (90° from equatorial) and equatorial (120° apart) positions. Axial bonds experience more repulsion.'},
+  {id:'ss5',d:5,bp:4,lp:1,eG:'Trigonal Bipyramidal',mG:'See-saw',ang:'~87°/~173°',form:'AX₄E',ex:['SF₄','XeO₂F₂'],desc:'Lone pair occupies the equatorial position. Axial atoms are pushed toward the lone pair, giving the distinctive see-saw shape.'},
+  {id:'ts5',d:5,bp:3,lp:2,eG:'Trigonal Bipyramidal',mG:'T-shaped',ang:'~87°',form:'AX₃E₂',ex:['ClF₃','BrF₃'],desc:'Two equatorial lone pairs. The remaining three bonds form a T shape. Axial angles are compressed to ~87°.'},
+  {id:'lin5',d:5,bp:2,lp:3,eG:'Trigonal Bipyramidal',mG:'Linear',ang:'180°',form:'AX₂E₃',ex:['XeF₂','I₃⁻','ClF₂⁻'],desc:'Three equatorial lone pairs; bonds only at axial positions. Despite 5 electron domains, the molecular shape is linear.'},
+  {id:'oct6',d:6,bp:6,lp:0,eG:'Octahedral',mG:'Octahedral',ang:'90°',form:'AX₆',ex:['SF₆','PF₆⁻','SiF₆²⁻'],desc:'Six identical bonding pairs form a perfect octahedron. All bond angles are exactly 90°. Highest symmetry VSEPR geometry.'},
+  {id:'spy6',d:6,bp:5,lp:1,eG:'Octahedral',mG:'Square Pyramidal',ang:'~87°',form:'AX₅E',ex:['BrF₅','XeOF₄','IF₅'],desc:'Lone pair at one axial position pushes four equatorial atoms slightly downward. All equatorial-axial angles compressed to ~87°.'},
+  {id:'spl6',d:6,bp:4,lp:2,eG:'Octahedral',mG:'Square Planar',ang:'90°',form:'AX₄E₂',ex:['XeF₄','PtCl₄²⁻','ICl₄⁻'],desc:'Two lone pairs on opposite axial positions cancel repulsion. Four bonds lie in a perfect square. Common in d⁸ transition metal complexes.'},
+];
+const VSEPR_3D={
+  lin2:{bA:[[1.3,0,0],[-1.3,0,0]],lPs:[],arcs:[[1,0,2]]},
+  tp3:{bA:[[1.3,0,0],[-0.65,0,1.126],[-0.65,0,-1.126]],lPs:[],arcs:[[1,0,2],[2,0,3]]},
+  bent3:{bA:[[1.1,0,0.76],[-1.1,0,0.76]],lPs:[[0,0,-1.3]],arcs:[[1,0,2]]},
+  tet4:{bA:[[0.75,0.75,0.75],[0.75,-0.75,-0.75],[-0.75,0.75,-0.75],[-0.75,-0.75,0.75]],lPs:[],arcs:[[1,0,2],[1,0,3]]},
+  tpy4:{bA:[[1.20,-0.43,0],[-0.60,-0.43,1.04],[-0.60,-0.43,-1.04]],lPs:[[0,1.3,0]],arcs:[[1,0,2],[2,0,3]]},
+  bent4:{bA:[[0.95,-0.50,0.55],[-0.95,-0.50,0.55]],lPs:[[0.82,0.58,-0.72],[-0.82,0.58,-0.72]],arcs:[[1,0,2]]},
+  tbp5:{bA:[[0,1.3,0],[0,-1.3,0],[1.3,0,0],[-0.65,0,1.126],[-0.65,0,-1.126]],lPs:[],arcs:[[1,0,2],[3,0,4]]},
+  ss5:{bA:[[0,1.26,0],[0,-1.26,0],[1.28,0,-0.12],[-0.65,0,-1.126]],lPs:[[-0.65,0,1.126]],arcs:[[1,0,2],[3,0,4]]},
+  ts5:{bA:[[0,1.3,0],[0,-1.3,0],[1.3,0,0]],lPs:[[-0.65,0,1.126],[-0.65,0,-1.126]],arcs:[[1,0,2],[1,0,3]]},
+  lin5:{bA:[[0,1.3,0],[0,-1.3,0]],lPs:[[1.3,0,0],[-0.65,0,1.126],[-0.65,0,-1.126]],arcs:[[1,0,2]]},
+  oct6:{bA:[[1.3,0,0],[-1.3,0,0],[0,1.3,0],[0,-1.3,0],[0,0,1.3],[0,0,-1.3]],lPs:[],arcs:[[1,0,3],[1,0,5],[3,0,5]]},
+  spy6:{bA:[[0,1.3,0],[1.3,0,0],[-1.3,0,0],[0,0,1.3],[0,0,-1.3]],lPs:[[0,-1.3,0]],arcs:[[1,0,2],[1,0,4]]},
+  spl6:{bA:[[1.3,0,0],[-1.3,0,0],[0,0,1.3],[0,0,-1.3]],lPs:[[0,1.3,0],[0,-1.3,0]],arcs:[[1,0,3],[1,0,4]]},
+};
+const GIANT_DATA={
+  diamond:{name:'Diamond',formula:'C',structType:'Giant Covalent (3D Network)',coord:4,bondType:'Covalent C–C (σ only)',angle:'109.5°',mp:'3550°C',hardness:'Mohs 10',conductor:'Electrical insulator',solubility:'Insoluble',
+    desc:'Every C atom is tetrahedrally bonded to 4 others in one infinite 3D network. No discrete molecules exist. All bonds are strong σ bonds (~348 kJ mol⁻¹).',
+    svp:'Hardest natural substance — all bonds must break simultaneously. No mobile electrons → insulator. Very high MP. Insoluble in all solvents.',
+    imf:['nc'],imfLabels:['Network covalent bonding only']},
+  graphite:{name:'Graphite',formula:'C (layered)',structType:'Giant Covalent (2D Layers)',coord:3,bondType:'Covalent σ + delocalised π (layers); VdW (between layers)',angle:'120°',mp:'3652°C (sublimes)',hardness:'Mohs 1–2',conductor:'Conductor (along layers)',solubility:'Insoluble',
+    desc:'Each C forms 3 σ bonds (trigonal planar, 120°) in a flat hexagonal layer. The 4th electron joins a delocalised π system. Layers are stacked A–B, held by weak London dispersion forces. Layer spacing: ~335 pm.',
+    svp:'Soft lubricant — layers slide over each other (weak VdW). Conducts electricity along layers (delocalised π electrons). High MP requires breaking covalent bonds. Used in pencils and electrodes.',
+    imf:['nc','pi'],imfLabels:['Network covalent (within layers)','London dispersion (between layers) + delocalised π']},
+  c60:{name:'Buckminsterfullerene',formula:'C₆₀',structType:'Molecular Solid',coord:3,bondType:'Covalent σ + π (within molecule); LDF between molecules',angle:'~108°/~120°',mp:'~600°C (sublimes)',hardness:'Very soft',conductor:'Insulator (superconducts when doped with K)',solubility:'Soluble in non-polar solvents',
+    desc:'Discrete molecules of 60 C atoms arranged as a truncated icosahedron: 20 hexagonal + 12 pentagonal faces. Each C bonds to 3 others. C₆₀ molecules held in solid by London dispersion forces only.',
+    svp:'Much lower MP than diamond/graphite — only LDF between molecules. Soluble in non-polar solvents (like dissolves like). Doped C₆₀ can be superconducting.',
+    imf:['ld'],imfLabels:['London dispersion forces only (between C₆₀ molecules)']},
+  sio2:{name:'Silicon Dioxide (Quartz)',formula:'SiO₂',structType:'Giant Covalent (3D Network)',coord:4,bondType:'Covalent Si–O (polar σ bonds)',angle:'Si: 109.5°; O: ~144°',mp:'1610–1728°C',hardness:'Mohs 7',conductor:'Electrical insulator',solubility:'Insoluble in water',
+    desc:'Each Si is tetrahedrally bonded to 4 O atoms. Each O bridges two Si atoms (bent, ~144°). Creates an infinite 3D network with empirical formula SiO₂.',
+    svp:'High MP — all Si–O bonds must break. Very hard. Insulator. Basis of glass, sand, quartz, computer chips. Dissolves slowly in HF only.',
+    imf:['nc'],imfLabels:['Network covalent bonding (Si–O) throughout 3D structure']},
+  silicon:{name:'Silicon',formula:'Si',structType:'Giant Covalent (Diamond Cubic)',coord:4,bondType:'Covalent Si–Si (σ bonds, diamond structure)',angle:'109.5°',mp:'1414°C',hardness:'Mohs 6.5',conductor:'Semiconductor (band gap ~1.1 eV)',solubility:'Insoluble',
+    desc:'Same diamond cubic structure as carbon. Each Si bonds to 4 others tetrahedrally. Si–Si bonds (~222 kJ mol⁻¹) are weaker than C–C (~348 kJ mol⁻¹) → lower MP. Band gap ~1.1 eV makes Si a semiconductor.',
+    svp:'Semiconductor — basis of all modern electronics. Doping with P (n-type) or B (p-type) introduces charge carriers. Used in solar cells, transistors, and integrated circuits.',
+    imf:['nc'],imfLabels:['Network covalent bonding + semiconductor band structure']},
+};
+const ELEMENTS=[
+  {sym:'H',name:'Hydrogen',v:1,period:1},{sym:'B',name:'Boron',v:3,period:2},
+  {sym:'C',name:'Carbon',v:4,period:2},{sym:'N',name:'Nitrogen',v:5,period:2},
+  {sym:'O',name:'Oxygen',v:6,period:2},{sym:'F',name:'Fluorine',v:7,period:2},
+  {sym:'Al',name:'Aluminium',v:3,period:3},{sym:'Si',name:'Silicon',v:4,period:3},
+  {sym:'P',name:'Phosphorus',v:5,period:3},{sym:'S',name:'Sulfur',v:6,period:3},
+  {sym:'Cl',name:'Chlorine',v:7,period:3},{sym:'Br',name:'Bromine',v:7,period:4},
+  {sym:'I',name:'Iodine',v:7,period:5},{sym:'Xe',name:'Xenon',v:8,period:5},
+];
+const TERM_EL=[{sym:'H'},{sym:'F'},{sym:'Cl'},{sym:'Br'},{sym:'O'},{sym:'N'}];
+
+// ══════════════════════════════════════════════════════════════════════════════
+// 3D ENGINE (warm palette)
+// ══════════════════════════════════════════════════════════════════════════════
+function hexToRGB(h){const x=h.replace('#','');return[parseInt(x.slice(0,2),16),parseInt(x.slice(2,4),16),parseInt(x.slice(4,6),16)];}
+function rgb(r,g,b,a=1){return`rgba(${r},${g},${b},${a})`;}
+function mkRotX(x,y,z,a){return{x,y:y*Math.cos(a)-z*Math.sin(a),z:y*Math.sin(a)+z*Math.cos(a)};}
+function mkRotY(x,y,z,a){return{x:x*Math.cos(a)+z*Math.sin(a),y,z:-x*Math.sin(a)+z*Math.cos(a)};}
+function makeCamera(rx,ry){return pos=>{let p={x:pos[0],y:pos[1],z:pos[2]};p=mkRotY(p.x,p.y,p.z,ry);p=mkRotX(p.x,p.y,p.z,rx);return p;};}
+function makeProjector(W,H,zoom){return p=>{const sc=Math.min(W,H)*0.22*zoom,fov=6,pz=fov/(fov+p.z*0.6);return{sx:W*.5+p.x*sc*pz,sy:H*.5-p.y*sc*pz,z:p.z,sp:pz};};}
+
+function drawAtomFull(ctx,proj,r,col,lbl,lblCol='#111'){
+  const[br,bg,bb]=hexToRGB(col);
+  ctx.save();ctx.shadowColor=rgb(br,bg,bb,.4);ctx.shadowBlur=14;
+  const gx=proj.sx-r*.35,gy=proj.sy-r*.4;
+  const gr=ctx.createRadialGradient(gx,gy,r*.05,proj.sx,proj.sy,r);
+  gr.addColorStop(0,rgb(Math.min(255,br+(255-br)*.6),Math.min(255,bg+(255-bg)*.6),Math.min(255,bb+(255-bb)*.6)));
+  gr.addColorStop(.45,col);gr.addColorStop(1,rgb(br*.55,bg*.55,bb*.55));
+  ctx.fillStyle=gr;ctx.beginPath();ctx.arc(proj.sx,proj.sy,r,0,Math.PI*2);ctx.fill();
+  ctx.shadowBlur=0;
+  const sg=ctx.createRadialGradient(proj.sx-r*.28,proj.sy-r*.38,0,proj.sx-r*.28,proj.sy-r*.38,r*.5);
+  sg.addColorStop(0,'rgba(255,255,255,.5)');sg.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.fillStyle=sg;ctx.beginPath();ctx.arc(proj.sx,proj.sy,r,0,Math.PI*2);ctx.fill();
+  if(lbl){ctx.fillStyle=lblCol;ctx.font=`800 ${Math.max(9,r*.6)}px Nunito`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(lbl,proj.sx,proj.sy+r*.06);}
+  ctx.restore();
+}
+function drawAtomSmall(ctx,proj,r,col,alpha=1){
+  const[br,bg,bb]=hexToRGB(col);ctx.save();ctx.globalAlpha=alpha;
+  const gr=ctx.createRadialGradient(proj.sx-r*.25,proj.sy-r*.3,r*.05,proj.sx,proj.sy,r);
+  gr.addColorStop(0,rgb(Math.min(255,br+80),Math.min(255,bg+80),Math.min(255,bb+80)));gr.addColorStop(1,rgb(br*.6,bg*.6,bb*.6));
+  ctx.fillStyle=gr;ctx.beginPath();ctx.arc(proj.sx,proj.sy,r,0,Math.PI*2);ctx.fill();ctx.restore();
+}
+function drawLonePair(ctx,proj,r){
+  ctx.save();
+  const cg=ctx.createRadialGradient(proj.sx,proj.sy,r*.05,proj.sx,proj.sy,r);
+  cg.addColorStop(0,'rgba(122,95,160,.38)');cg.addColorStop(.5,'rgba(100,75,140,.22)');cg.addColorStop(1,'rgba(80,55,120,0)');
+  ctx.fillStyle=cg;ctx.beginPath();ctx.arc(proj.sx,proj.sy,r,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle='rgba(122,95,160,.55)';ctx.lineWidth=1.3;ctx.setLineDash([3,4]);
+  ctx.beginPath();ctx.arc(proj.sx,proj.sy,r*.82,0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);
+  ctx.fillStyle='rgba(140,108,190,.9)';
+  ctx.beginPath();ctx.arc(proj.sx-4,proj.sy,3,0,Math.PI*2);ctx.fill();
+  ctx.beginPath();ctx.arc(proj.sx+4,proj.sy,3,0,Math.PI*2);ctx.fill();
+  ctx.restore();
+}
+function drawBondLine(ctx,p1,p2,col='#5A88B0',dashed=false){
+  ctx.save();if(dashed)ctx.setLineDash([5,6]);
+  ctx.strokeStyle=col;ctx.lineWidth=7;ctx.globalAlpha=.07;ctx.lineCap='round';
+  ctx.beginPath();ctx.moveTo(p1.sx,p1.sy);ctx.lineTo(p2.sx,p2.sy);ctx.stroke();
+  ctx.lineWidth=2.5;ctx.globalAlpha=.65;ctx.stroke();ctx.restore();
+}
+function drawVdW(ctx,p1,p2){
+  ctx.save();ctx.setLineDash([4,7]);ctx.strokeStyle='rgba(122,95,160,.45)';ctx.lineWidth=1.3;
+  ctx.beginPath();ctx.moveTo(p1.sx,p1.sy);ctx.lineTo(p2.sx,p2.sy);ctx.stroke();ctx.restore();
+}
+function drawAngleArc(ctx,cp,p1,p2,label){
+  const r=60;
+  const a1=Math.atan2(p1.sy-cp.sy,p1.sx-cp.sx),a2=Math.atan2(p2.sy-cp.sy,p2.sx-cp.sx);
+  let d=a2-a1;while(d<-Math.PI)d+=2*Math.PI;while(d>Math.PI)d-=2*Math.PI;
+  ctx.save();ctx.strokeStyle='rgba(200,128,10,.75)';ctx.lineWidth=1.5;ctx.setLineDash([4,4]);
+  ctx.beginPath();ctx.arc(cp.sx,cp.sy,r,Math.min(a1,a1+d),Math.max(a1,a1+d));ctx.stroke();ctx.setLineDash([]);
+  const ma=a1+d/2;
+  ctx.fillStyle='#C8800A';ctx.font=`600 12px JetBrains Mono`;ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText(label,cp.sx+Math.cos(ma)*(r+16),cp.sy+Math.sin(ma)*(r+16));ctx.restore();
+}
+function drawBackground(ctx,W,H){
+  ctx.fillStyle='#F8F4EE';ctx.fillRect(0,0,W,H);
+  const cg=ctx.createRadialGradient(W*.5,H*.5,0,W*.5,H*.5,Math.min(W,H)*.65);
+  cg.addColorStop(0,'rgba(180,160,120,.06)');cg.addColorStop(1,'rgba(248,244,238,0)');
+  ctx.fillStyle=cg;ctx.fillRect(0,0,W,H);
+  ctx.save();ctx.strokeStyle='rgba(120,100,70,.025)';ctx.lineWidth=.6;
+  for(let x=0;x<W;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+  for(let y=0;y<H;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+  ctx.restore();
+}
+function resizeCanvas(id,wrapId){
+  const cvs=document.getElementById(id);if(!cvs)return{W:0,H:0,dpr:1,ctx:null};
+  const ctx=cvs.getContext('2d'),dpr=window.devicePixelRatio||1;
+  const wrap=document.getElementById(wrapId);if(!wrap)return{W:0,H:0,dpr,ctx};
+  const W=wrap.clientWidth||600,H=wrap.clientHeight||520;
+  cvs.width=W*dpr;cvs.height=H*dpr;cvs.style.width=W+'px';cvs.style.height=H+'px';
+  ctx.setTransform(dpr,0,0,dpr,0,0);return{W,H,dpr,ctx};
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// TAB SYSTEM
+// ══════════════════════════════════════════════════════════════════════════════
+let imfStarted=false;
+function switchTab(name){
+  ['vsepr','giant','builder','imf'].forEach(t=>{
+    const el=document.getElementById('tab-'+t);
+    if(el)el.style.display=t===name?'block':'none';
+  });
+  document.querySelectorAll('.tnav-btn').forEach((b,i)=>{
+    b.classList.toggle('active',['vsepr','giant','builder','imf'][i]===name);
+  });
+  if(name==='giant')setTimeout(()=>gResize(),50);
+  if(name==='builder')setTimeout(()=>bResize(),50);
+  if(name==='imf'&&!imfStarted){imfStarted=true;setTimeout(()=>startIMFAnimations(),100);}
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// VSEPR TAB
+// ══════════════════════════════════════════════════════════════════════════════
+let vRx=0.35,vRy=0.55,vZoom=1,vDrag=false,vLX=0,vLY=0;
+let vOpts={rot:true,lp:true,ang:true};
+let vMolId='tet4',vDomain=4;
+const vCvs=document.getElementById('vsepr-cvs');
+const vCtx=vCvs.getContext('2d');
+let vW=0,vH=0;
+function vResize(){const r=resizeCanvas('vsepr-cvs','vsepr-wrap');vW=r.W;vH=r.H;}
+window.addEventListener('resize',()=>{vResize();if(gW>0)gResize();if(bW>0)bResize();});
+
+function renderVSEPR(){
+  const mol=VSEPR.find(m=>m.id===vMolId);if(!mol)return;
+  const g=VSEPR_3D[vMolId];if(!g)return;
+  drawBackground(vCtx,vW,vH);
+  const cam=makeCamera(vRx,vRy),proj=makeProjector(vW,vH,vZoom);
+  const cp3=cam([0,0,0]),cpP=proj(cp3);
+  const bPs=g.bA.map(a=>proj(cam(a)));
+  const lPs=g.lPs.map(a=>proj(cam(a)));
+  const aR=Math.min(vW,vH)*.05,tR=Math.min(vW,vH)*.038,lR=Math.min(vW,vH)*.052;
+  bPs.forEach(p=>drawBondLine(vCtx,cpP,p));
+  if(vOpts.lp)lPs.forEach(p=>drawBondLine(vCtx,cpP,p,undefined,true));
+  const items=[{t:'c',p:cpP,z:cp3.z},...bPs.map((p,i)=>({t:'b',p,z:cam(g.bA[i]).z})),...(vOpts.lp?lPs.map((p,i)=>({t:'l',p,z:cam(g.lPs[i]).z})):[])];
+  items.sort((a,b)=>a.z-b.z);
+  items.forEach(it=>{
+    if(it.t==='c')drawAtomFull(vCtx,it.p,aR,'#B8B8B0','A','#333');
+    else if(it.t==='b')drawAtomFull(vCtx,it.p,tR,'#4A90C0','X','#fff');
+    else drawLonePair(vCtx,it.p,lR);
+  });
+  if(vOpts.ang&&g.arcs.length){
+    g.arcs.slice(0,2).forEach(([ai,ci,bi])=>{
+      const getP=i=>{if(i===0)return cpP;if(i<=bPs.length)return bPs[i-1];return lPs[i-bPs.length-1];};
+      drawAngleArc(vCtx,getP(ci),getP(ai),getP(bi),mol.ang.split('/')[0]);
+    });
+  }
+}
+let vLast=null;
+function vFrame(ts){if(!vLast)vLast=ts;const dt=Math.min((ts-vLast)/1000,.05);vLast=ts;if(vOpts.rot)vRy+=0.35*dt;renderVSEPR();requestAnimationFrame(vFrame);}
+function setDomain(d){vDomain=d;document.querySelectorAll('.dtab').forEach((b,i)=>b.classList.toggle('active',i===d-2));const first=VSEPR.find(m=>m.d===d);if(first)selectMol(first.id);}
+function selectMol(id){vMolId=id;buildMolGrid(vDomain);updateVPanel();}
+function buildMolGrid(d){
+  const mols=VSEPR.filter(m=>m.d===d);
+  document.getElementById('mol-grid').innerHTML=mols.map(m=>`
+    <button class="mol-btn${m.id===vMolId?' active':''}" onclick="selectMol('${m.id}')">
+      ${m.mG}<span class="mb-f">${m.form}</span>
+      <span class="mb-l lp${m.lp}">${m.lp===0?'No lone pairs':m.lp+' lone pair'+(m.lp>1?'s':'')}</span>
+    </button>`).join('');
+}
+function updateVPanel(){
+  const mol=VSEPR.find(m=>m.id===vMolId);if(!mol)return;
+  document.getElementById('v-egeo').textContent=mol.eG;document.getElementById('v-mgeo').textContent=mol.mG;
+  document.getElementById('eg-n').textContent=mol.eG;document.getElementById('eg-s').textContent=mol.d+' total domains';
+  document.getElementById('mg-n').textContent=mol.mG;document.getElementById('mg-s').textContent=mol.lp+' lone pair'+(mol.lp!==1?'s':'');
+  document.getElementById('sc-ang').textContent=mol.ang;document.getElementById('sc-form').textContent=mol.form;document.getElementById('sc-lp').textContent=mol.lp;
+  document.getElementById('v-ex').innerHTML=mol.ex.map(e=>`<span class="ex-tag">${e}</span>`).join('');
+  document.getElementById('v-desc').textContent=mol.desc;
+}
+function toggleVOpt(k){vOpts[k]=!vOpts[k];document.getElementById('vbtn-'+k).classList.toggle('on',vOpts[k]);}
+vCvs.addEventListener('mousedown',e=>{vDrag=true;vLX=e.clientX;vLY=e.clientY;vOpts.rot=false;document.getElementById('vbtn-rot').classList.remove('on');});
+window.addEventListener('mousemove',e=>{if(!vDrag)return;vRy+=(e.clientX-vLX)*.01;vRx+=(e.clientY-vLY)*.01;vRx=Math.max(-Math.PI/2,Math.min(Math.PI/2,vRx));vLX=e.clientX;vLY=e.clientY;});
+window.addEventListener('mouseup',()=>vDrag=false);
+vCvs.addEventListener('wheel',e=>{e.preventDefault();vZoom=Math.max(.4,Math.min(2.5,vZoom-e.deltaY*.001));},{passive:false});
+vCvs.addEventListener('touchstart',e=>{if(e.touches.length===1){vDrag=true;vLX=e.touches[0].clientX;vLY=e.touches[0].clientY;vOpts.rot=false;}},{passive:true});
+vCvs.addEventListener('touchmove',e=>{if(!vDrag||e.touches.length!==1)return;vRy+=(e.touches[0].clientX-vLX)*.012;vRx+=(e.touches[0].clientY-vLY)*.012;vRx=Math.max(-Math.PI/2,Math.min(Math.PI/2,vRx));vLX=e.touches[0].clientX;vLY=e.touches[0].clientY;},{passive:true});
+vCvs.addEventListener('touchend',()=>vDrag=false,{passive:true});
+
+// ══════════════════════════════════════════════════════════════════════════════
+// GIANT STRUCTURES TAB
+// ══════════════════════════════════════════════════════════════════════════════
+let gRx=0.4,gRy=0.6,gZoom=1,gDrag=false,gLX=0,gLY=0;
+let gOpts={rot:true,ext:true};let gCurId='diamond';
+const gCvs=document.getElementById('giant-cvs'),gCtx=gCvs.getContext('2d');
+let gW=0,gH=0;
+function gResize(){const r=resizeCanvas('giant-cvs','giant-wrap');gW=r.W;gH=r.H;}
+function buildDiamond(ext){
+  const v=1.3,t=v/Math.sqrt(3);
+  const atoms=[{pos:[0,0,0],col:'#8A9FB5',r:1,lbl:'C'}];
+  [[t,t,t],[t,-t,-t],[-t,t,-t],[-t,-t,t]].forEach(p=>atoms.push({pos:p,col:'#8A9FB5',r:.85,lbl:'C'}));
+  const bonds=[[0,1],[0,2],[0,3],[0,4]];
+  if(ext){
+    [[2*t,0,2*t],[0,2*t,2*t],[2*t,2*t,0],[2*t,0,-2*t],[0,-2*t,2*t],[2*t,-2*t,0]].forEach((p,i)=>{atoms.push({pos:p,col:'#5A7090',r:.6,lbl:'C',g:true});bonds.push([1,5+i]);});
+  }
+  return{atoms,bonds,vdwBonds:[]};
+}
+function buildSilicon(ext){const sc=buildDiamond(ext);sc.atoms.forEach(a=>{a.col=a.g?'#4A7A68':'#5A9E88';});return sc;}
+function buildSiO2(ext){
+  const t=1.1/Math.sqrt(3);
+  const atoms=[{pos:[0,0,0],col:'#5A9E88',r:.95,lbl:'Si'}];
+  [[t,t,t],[t,-t,-t],[-t,t,-t],[-t,-t,t]].forEach(p=>atoms.push({pos:p,col:'#B07878',r:.75,lbl:'O'}));
+  const bonds=[[0,1],[0,2],[0,3],[0,4]];
+  if(ext){const s=2.2/Math.sqrt(3);[[s,s,s],[s,-s,-s],[-s,s,-s],[-s,-s,s]].forEach((p,i)=>{atoms.push({pos:p,col:'#3A6A58',r:.7,lbl:'Si',g:true});bonds.push([1+i,5+i]);});}
+  return{atoms,bonds,vdwBonds:[]};
+}
+function buildGraphite(){
+  const r=1.2,y1=.38,y2=-.38,atoms=[],bonds=[],vdwBonds=[];
+  for(let i=0;i<6;i++){const a=i*Math.PI/3;atoms.push({pos:[r*Math.cos(a),y1,r*Math.sin(a)],col:'#5A88B0',r:.55,lbl:'C'});}
+  for(let i=0;i<6;i++)bonds.push([i,(i+1)%6]);
+  const r2=r*.867,off=Math.PI/6;
+  for(let i=0;i<6;i++){const a=i*Math.PI/3+off;atoms.push({pos:[r2*Math.cos(a),y2,r2*Math.sin(a)],col:'#5A9E88',r:.55,lbl:'C'});}
+  for(let i=0;i<6;i++)bonds.push([6+i,6+(i+1)%6]);
+  for(let i=0;i<6;i++)vdwBonds.push([i,6+((i+3)%6)]);
+  for(let i=0;i<6;i++){const a=i*Math.PI/3,ep=[r*1.9*Math.cos(a),y1,r*1.9*Math.sin(a)];atoms.push({pos:ep,col:'#4A6A8A',r:.38,lbl:'C',g:true});bonds.push([i,12+i]);}
+  return{atoms,bonds,vdwBonds};
+}
+function generateC60(){
+  const phi=(1+Math.sqrt(5))/2,verts=[];
+  const ep=[[0,1,2],[2,0,1],[1,2,0]];
+  const addP=(a,b,c)=>ep.forEach(([i,j,k])=>{const v=[a,b,c];verts.push([v[i],v[j],v[k]]);});
+  for(const s1 of[1,-1])for(const s2 of[1,-1])addP(0,s1,s2*3*phi);
+  for(const s1 of[1,-1])for(const s2 of[1,-1])for(const s3 of[1,-1])addP(s1,s2*(2+phi),s3*2*phi);
+  for(const s1 of[1,-1])for(const s2 of[1,-1])for(const s3 of[1,-1])addP(s1*2,s2*(1+2*phi),s3*phi);
+  const R=Math.sqrt(verts[0].reduce((s,x)=>s+x*x,0)),sc=1.6/R,nv=verts.map(v=>v.map(x=>x*sc));
+  const edgeSet=new Set();
+  nv.forEach((v,i)=>{nv.map((u,j)=>{if(i===j)return{j,d:1e9};return{j,d:Math.sqrt(v.reduce((s,x,k)=>s+(x-u[k])**2,0))};}).sort((a,b)=>a.d-b.d).slice(0,3).forEach(({j})=>{const k=`${Math.min(i,j)}-${Math.max(i,j)}`;if(!edgeSet.has(k))edgeSet.add(k);});});
+  return{atoms:nv.map(v=>({pos:v,col:'#7A9EB8',r:.18,lbl:''})),bonds:[...edgeSet].map(k=>k.split('-').map(Number)),vdwBonds:[]};
+}
+const C60_SCENE=generateC60();
+function getGiantScene(id){
+  if(id==='diamond')return buildDiamond(gOpts.ext);if(id==='silicon')return buildSilicon(gOpts.ext);
+  if(id==='sio2')return buildSiO2(gOpts.ext);if(id==='graphite')return buildGraphite();
+  if(id==='c60')return C60_SCENE;return buildDiamond(true);
+}
+function renderGiant(){
+  if(gW===0||gH===0)return;
+  drawBackground(gCtx,gW,gH);
+  const sc=getGiantScene(gCurId),cam=makeCamera(gRx,gRy),proj=makeProjector(gW,gH,gZoom);
+  const ps=sc.atoms.map(a=>({p:proj(cam(a.pos)),z:cam(a.pos).z,atom:a}));
+  sc.vdwBonds.forEach(([i,j])=>drawVdW(gCtx,ps[i].p,ps[j].p));
+  sc.bonds.forEach(([i,j])=>{const a=sc.atoms[j];drawBondLine(gCtx,ps[i].p,ps[j].p,a.g?'rgba(80,110,160,.4)':'#5A88B0',a.g);});
+  [...ps].sort((a,b)=>a.z-b.z).forEach(({p,atom})=>{
+    const BR=Math.min(gW,gH),r=BR*(atom.r||.5)*.042;
+    if(r<2)drawAtomSmall(gCtx,p,r,atom.col,atom.g?.5:1);
+    else if(atom.lbl)drawAtomFull(gCtx,p,r,atom.col,atom.lbl,atom.col==='#B07878'||atom.col==='#5A9E88'?'#fff':'#111');
+    else drawAtomSmall(gCtx,p,r,atom.col,atom.g?.4:.9);
+  });
+}
+let gLast=null;
+function gFrame(ts){if(!gLast)gLast=ts;const dt=Math.min((ts-gLast)/1000,.05);gLast=ts;if(gOpts.rot)gRy+=0.3*dt;renderGiant();requestAnimationFrame(gFrame);}
+function selectGiant(id){gCurId=id;document.querySelectorAll('.g-btn').forEach(b=>b.classList.toggle('active',b.getAttribute('onclick').includes(`'${id}'`)));updateGiantPanel(id);}
+function updateGiantPanel(id){
+  const d=GIANT_DATA[id];if(!d)return;
+  document.getElementById('g-type').textContent=d.structType;document.getElementById('g-coord').textContent=d.coord;
+  const props=[['Bond type',d.bondType],['Bond angle',d.angle],['Melting point',d.mp],['Hardness',d.hardness],['Conductivity',d.conductor],['Solubility',d.solubility]];
+  document.getElementById('g-props').innerHTML=props.map(([l,v])=>`<div class="prop-card"><div class="pc-l">${l}</div><div class="pc-v">${v}</div></div>`).join('');
+  document.getElementById('g-desc').textContent=d.desc;document.getElementById('g-svp').textContent=d.svp;
+  document.getElementById('g-imf').innerHTML=d.imf.map((t,i)=>`<span class="imf-chip ${t}">${d.imfLabels[i]}</span>`).join('');
+}
+function toggleGOpt(k){gOpts[k]=!gOpts[k];document.getElementById('gbtn-'+k).classList.toggle('on',gOpts[k]);}
+gCvs.addEventListener('mousedown',e=>{gDrag=true;gLX=e.clientX;gLY=e.clientY;gOpts.rot=false;document.getElementById('gbtn-rot').classList.remove('on');});
+window.addEventListener('mousemove',e=>{if(!gDrag)return;gRy+=(e.clientX-gLX)*.01;gRx+=(e.clientY-gLY)*.01;gRx=Math.max(-Math.PI/2,Math.min(Math.PI/2,gRx));gLX=e.clientX;gLY=e.clientY;});
+gCvs.addEventListener('wheel',e=>{e.preventDefault();gZoom=Math.max(.3,Math.min(3,gZoom-e.deltaY*.001));},{passive:false});
+gCvs.addEventListener('touchstart',e=>{if(e.touches.length===1){gDrag=true;gLX=e.touches[0].clientX;gLY=e.touches[0].clientY;gOpts.rot=false;}},{passive:true});
+gCvs.addEventListener('touchmove',e=>{if(!gDrag||e.touches.length!==1)return;gRy+=(e.touches[0].clientX-gLX)*.012;gRx+=(e.touches[0].clientY-gLY)*.012;gRx=Math.max(-Math.PI/2,Math.min(Math.PI/2,gRx));gLX=e.touches[0].clientX;gLY=e.touches[0].clientY;},{passive:true});
+gCvs.addEventListener('touchend',()=>gDrag=false,{passive:true});
+
+// ══════════════════════════════════════════════════════════════════════════════
+// CUSTOM BUILDER
+// ══════════════════════════════════════════════════════════════════════════════
+let bRx=0.35,bRy=0.55,bZoom=1,bDrag=false,bLX=0,bLY=0;
+let bOpts={rot:true,lp:true};let bEl='C',bTermEl='H',bBP=4,bLP=0,bMolId='tet4';
+const bCvs=document.getElementById('builder-cvs'),bCtx=bCvs.getContext('2d');
+let bW=0,bH=0;
+function bResize(){const r=resizeCanvas('builder-cvs','builder-wrap');bW=r.W;bH=r.H;}
+function buildElGrid(){
+  document.getElementById('el-grid').innerHTML=ELEMENTS.map(e=>`<button class="el-btn${e.sym===bEl?' active':''}" title="${e.name}" onclick="selectEl('${e.sym}')">${e.sym}<span class="el-p">P${e.period}</span></button>`).join('');
+  document.getElementById('term-el-grid').innerHTML=TERM_EL.map(e=>`<button class="el-btn${e.sym===bTermEl?' active':''}" onclick="selectTermEl('${e.sym}')">${e.sym}</button>`).join('');
+}
+function selectEl(sym){bEl=sym;buildElGrid();runBuilder();}
+function selectTermEl(sym){bTermEl=sym;buildElGrid();runBuilder();}
+function adjustBP(d){bBP=Math.max(1,Math.min(6,bBP+d));document.getElementById('bp-val').textContent=bBP;runBuilder();}
+function adjustLP(d){bLP=Math.max(0,Math.min(4,bLP+d));document.getElementById('lp-val').textContent=bLP;runBuilder();}
+function validate(el,bp,lp){
+  const e=ELEMENTS.find(x=>x.sym===el);if(!e)return{ok:false,msg:'Unknown element.',fc:0};
+  const domains=bp+lp;
+  if(domains<2)return{ok:false,msg:'Need at least 2 electron domains.',fc:0};
+  if(domains>6)return{ok:false,msg:'Maximum 6 electron domains.',fc:0};
+  if(e.period===1&&domains>2)return{ok:false,msg:`${el} is period 1 — max 2 domains (duet rule).`,fc:0};
+  if(e.period===2&&domains>4)return{ok:false,msg:`${el} is period 2 — no d-orbitals, max 4 domains.`,fc:0};
+  const fc=e.v-2*lp-bp;let warn=false,msg='';
+  if(Math.abs(fc)>2){warn=true;msg=`Unusual formal charge (${fc>0?'+':''}${fc}) — may exist as ion.`;}
+  else if(fc===0)msg='Formal charge 0 — stable neutral molecule likely.';
+  else msg=`Formal charge ${fc>0?'+':''}${fc} — ion or charged species.`;
+  return{ok:true,warn,msg,fc};
+}
+function runBuilder(){
+  const domains=bBP+bLP;
+  const mol=VSEPR.find(m=>m.d===domains&&m.lp===bLP&&m.bp===bBP)||VSEPR.find(m=>m.d===domains&&m.lp===bLP);
+  const v=validate(bEl,bBP,bLP),e=ELEMENTS.find(x=>x.sym===bEl);
+  const vb=document.getElementById('validity-box');
+  document.getElementById('bld-formula').textContent=mol?mol.form:`AX${bBP}${bLP>0?'E'+(bLP>1?bLP:''):''}`;
+  if(!v.ok){
+    vb.className='validity-box vb-invalid';vb.textContent=v.msg;
+    ['bld-geo','b-mgeo','b-mgeo2'].forEach(id=>document.getElementById(id).textContent='Invalid');return;
+  }
+  vb.className=v.warn?'validity-box vb-warn':'validity-box vb-valid';vb.textContent=v.msg;
+  if(mol){
+    document.getElementById('bld-geo').textContent=mol.mG;document.getElementById('b-egeo').textContent=mol.eG;
+    document.getElementById('b-mgeo').textContent=mol.mG;document.getElementById('b-mgeo2').textContent=mol.mG;
+    document.getElementById('b-edoms').textContent=domains+' total domains';document.getElementById('b-lps').textContent=bLP+' lone pair'+(bLP!==1?'s':'');
+    document.getElementById('b-ang').textContent=mol.ang;document.getElementById('b-pol').textContent=bLP>0||bBP===1?'Polar':'Non-polar';
+    document.getElementById('b-ex').innerHTML=mol.ex.map(ex=>`<span class="ex-tag">${ex}</span>`).join('');
+    document.getElementById('b-desc').textContent=mol.desc;bMolId=mol.id;
+  }
+  document.getElementById('bld-fc').textContent=`Formal charge: ${v.fc>0?'+':''}${v.fc} (V=${e.v}, 2LP=${2*bLP}, BP=${bBP})`;
+  const analyses=[];
+  if(e.period===2)analyses.push({ok:true,txt:`Period 2 element: max 4 electron domains. Currently ${domains}/4.`});
+  if(e.period>=3)analyses.push({ok:true,txt:`Period 3+ element: can expand octet. Currently ${domains}/6.`});
+  if(v.fc===0)analyses.push({ok:true,txt:'Formal charge = 0. Satisfies octet rule exactly.'});
+  if(Math.abs(v.fc)>0&&Math.abs(v.fc)<=2)analyses.push({ok:true,txt:`Non-zero formal charge (${v.fc>0?'+':''}${v.fc}). Ion or resonance structure likely.`});
+  if(Math.abs(v.fc)>2)analyses.push({ok:false,txt:`Formal charge (${v.fc}) is unusually large. Reconsider configuration.`});
+  if(bLP>0&&e.period===2)analyses.push({ok:true,txt:'Lone pairs on period 2 atom — expect compressed bond angles.'});
+  document.getElementById('b-analysis').innerHTML=analyses.map(a=>`
+    <div class="rule"><div class="rn" style="background:${a.ok?'rgba(58,124,168,.12)':'rgba(160,64,64,.12)'};border-color:${a.ok?'rgba(58,124,168,.35)':'rgba(160,64,64,.35)'};color:${a.ok?'var(--blue)':'var(--red)'}">
+    ${a.ok?'✓':'!'}</div>${a.txt}</div>`).join('');
+}
+function renderBuilder(){
+  const mol=VSEPR.find(m=>m.id===bMolId),g=VSEPR_3D[bMolId];
+  if(!mol||!g||bW===0){if(bW>0)drawBackground(bCtx,bW,bH);return;}
+  drawBackground(bCtx,bW,bH);
+  const cam=makeCamera(bRx,bRy),proj=makeProjector(bW,bH,bZoom),cpP=proj(cam([0,0,0]));
+  const bPs=g.bA.map(a=>proj(cam(a))),lPs=g.lPs.map(a=>proj(cam(a)));
+  const aR=Math.min(bW,bH)*.052,tR=Math.min(bW,bH)*.04,lR=Math.min(bW,bH)*.052;
+  const eC={H:'#C8C8C0',C:'#7A8A9A',N:'#5A82CF',O:'#CF6A6A',F:'#8ADF68',Cl:'#68CF68',Br:'#A84A00',S:'#CFAA44',P:'#CF8855',Si:'#5A8E78',I:'#8844AA',Xe:'#9A78DF',Al:'#8AAAB8',B:'#DFA86A'};
+  const cenCol=eC[bEl]||'#B0B8C8',termCol=eC[bTermEl]||'#5A9FC8';
+  bPs.forEach(p=>drawBondLine(bCtx,cpP,p,termCol));
+  if(bOpts.lp)lPs.forEach(p=>drawBondLine(bCtx,cpP,p,undefined,true));
+  const items=[{t:'c',p:cpP,z:cam([0,0,0]).z},...bPs.map((p,i)=>({t:'b',p,z:cam(g.bA[i]).z})),...(bOpts.lp?lPs.map((p,i)=>({t:'l',p,z:cam(g.lPs[i]).z})):[])];
+  items.sort((a,b)=>a.z-b.z);
+  items.forEach(it=>{
+    if(it.t==='c')drawAtomFull(bCtx,it.p,aR,cenCol,bEl,cenCol==='#C8C8C0'?'#333':'#fff');
+    else if(it.t==='b')drawAtomFull(bCtx,it.p,tR,termCol,bTermEl,termCol==='#C8C8C0'?'#333':'#fff');
+    else drawLonePair(bCtx,it.p,lR);
+  });
+}
+let bLast=null;
+function bFrame(ts){if(!bLast)bLast=ts;const dt=Math.min((ts-bLast)/1000,.05);bLast=ts;if(bOpts.rot)bRy+=0.35*dt;renderBuilder();requestAnimationFrame(bFrame);}
+function toggleBOpt(k){bOpts[k]=!bOpts[k];document.getElementById('bbtn-'+k).classList.toggle('on',bOpts[k]);}
+bCvs.addEventListener('mousedown',e=>{bDrag=true;bLX=e.clientX;bLY=e.clientY;bOpts.rot=false;document.getElementById('bbtn-rot').classList.remove('on');});
+window.addEventListener('mousemove',e=>{if(!bDrag)return;bRy+=(e.clientX-bLX)*.01;bRx+=(e.clientY-bLY)*.01;bRx=Math.max(-Math.PI/2,Math.min(Math.PI/2,bRx));bLX=e.clientX;bLY=e.clientY;});
+bCvs.addEventListener('wheel',e=>{e.preventDefault();bZoom=Math.max(.4,Math.min(2.5,bZoom-e.deltaY*.001));},{passive:false});
+bCvs.addEventListener('touchstart',e=>{if(e.touches.length===1){bDrag=true;bLX=e.touches[0].clientX;bLY=e.touches[0].clientY;bOpts.rot=false;}},{passive:true});
+bCvs.addEventListener('touchmove',e=>{if(!bDrag||e.touches.length!==1)return;bRy+=(e.touches[0].clientX-bLX)*.012;bRx+=(e.touches[0].clientY-bLY)*.012;bRx=Math.max(-Math.PI/2,Math.min(Math.PI/2,bRx));bLX=e.touches[0].clientX;bLY=e.touches[0].clientY;},{passive:true});
+bCvs.addEventListener('touchend',()=>bDrag=false,{passive:true});
+
+// ══════════════════════════════════════════════════════════════════════════════
+// IMF ELECTRON CLOUD ANIMATIONS — warm palette
+// ══════════════════════════════════════════════════════════════════════════════
+function setupIMFCanvas(id){
+  const cvs=document.getElementById(id);if(!cvs)return null;
+  const dpr=window.devicePixelRatio||1,W=cvs.parentElement.clientWidth||340,H=200;
+  cvs.width=W*dpr;cvs.height=H*dpr;cvs.style.width=W+'px';cvs.style.height=H+'px';
+  const ctx=cvs.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);
+  return{ctx,W,H};
+}
+function warmBg(ctx,W,H){
+  const g=ctx.createLinearGradient(0,0,W,H);
+  g.addColorStop(0,'#EDE8DE');g.addColorStop(1,'#E8E2D6');
+  ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+}
+
+// ─── LDF: two atoms, electron cloud sloshes back & forth, labels flip
+function animLDF(t){
+  const c=setupIMFCanvas('cvs-ldf');if(!c)return;
+  const{ctx,W,H}=c;warmBg(ctx,W,H);
+  const r=28,cx1=W*0.27,cx2=W*0.73,cy=H*0.48;
+  const phase=t*1.2;
+  // Electron density offset: one side rich, other poor → induced dipole
+  for(let atom=0;atom<2;atom++){
+    const cx=atom===0?cx1:cx2;
+    // Cloud offset is sinusoidal — atom1 left-heavy when atom2 right-heavy
+    const offset=(atom===0?1:-1)*Math.sin(phase)*10;
+    // Draw 4 cloud layers with offset
+    for(let layer=3;layer>=0;layer--){
+      const a=0.06+layer*0.055;
+      const cloudG=ctx.createRadialGradient(cx+offset,cy,0,cx+offset*0.4,cy,r*(1.6+layer*0.5));
+      const col=atom===0?`58,124,168`:`46,139,106`;
+      cloudG.addColorStop(0,`rgba(${col},${a*1.8})`);
+      cloudG.addColorStop(0.5,`rgba(${col},${a})`);
+      cloudG.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=cloudG;ctx.beginPath();ctx.ellipse(cx+offset*0.6,cy,r*(1.5+layer*0.5),r*(1.3+layer*0.3),0,0,Math.PI*2);ctx.fill();
+    }
+    // Nucleus
+    const nucG=ctx.createRadialGradient(cx-r*.25,cy-r*.25,1,cx,cy,r);
+    const c1=atom===0?['#8AB8D8','#2A6A98']:['#7AC8B0','#1A7850'];
+    nucG.addColorStop(0,c1[0]);nucG.addColorStop(1,c1[1]);
+    ctx.fillStyle=nucG;ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.fill();
+    // Shine
+    const shine=ctx.createRadialGradient(cx-r*.3,cy-r*.35,0,cx-r*.3,cy-r*.35,r*.5);
+    shine.addColorStop(0,'rgba(255,255,255,.45)');shine.addColorStop(1,'rgba(255,255,255,0)');
+    ctx.fillStyle=shine;ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.fill();
+    // δ label
+    const sinV=Math.sin(phase);
+    const isNeg=(atom===0&&sinV>0)||(atom===1&&sinV<0);
+    const lbl=isNeg?'δ−':'δ+';
+    const lblCol=isNeg?'#A04040':'#2A6A98';
+    ctx.fillStyle=lblCol;ctx.font='bold 13px JetBrains Mono';ctx.textAlign='center';
+    ctx.fillText(lbl,cx,cy-r-8);
+    // Atom label
+    ctx.fillStyle='rgba(255,255,255,.9)';ctx.font='bold 13px Nunito';ctx.textAlign='center';
+    ctx.fillText(atom===0?'Ar':'Ar',cx,cy+4);
+  }
+  // Interaction arrow when dipoles are strong
+  const strength=Math.abs(Math.sin(phase));
+  if(strength>0.4){
+    ctx.save();ctx.globalAlpha=0.35+strength*0.45;
+    ctx.strokeStyle='#C8800A';ctx.lineWidth=2;ctx.setLineDash([5,4]);
+    ctx.beginPath();ctx.moveTo(cx1+r+4,cy);ctx.lineTo(cx2-r-4,cy);ctx.stroke();
+    ctx.setLineDash([]);
+    // arrow heads
+    ctx.fillStyle='#C8800A';
+    [[cx1+r+12,cy,-1],[cx2-r-12,cy,1]].forEach(([x,y,d])=>{
+      ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+d*7,y-5);ctx.lineTo(x+d*7,y+5);ctx.closePath();ctx.fill();
+    });
+    ctx.restore();
+  }
+  ctx.fillStyle='rgba(107,91,69,.7)';ctx.font='600 11px Nunito';ctx.textAlign='center';
+  ctx.fillText('Electron cloud density fluctuates → instantaneous dipole forms',W/2,H-7);
+}
+
+// ─── Dipole-Dipole: HCl molecules with electron cloud asymmetry visible
+const ddAngles=[0.15,-0.12,0.18];
+function animDD(t){
+  const c=setupIMFCanvas('cvs-dd');if(!c)return;
+  const{ctx,W,H}=c;warmBg(ctx,W,H);
+  const spacing=W/3.5;
+  for(let i=0;i<3;i++){
+    const cx=W*0.18+i*spacing,cy=H*0.46;
+    const ang=ddAngles[i]+Math.sin(t*0.5+i*1.2)*0.06;
+    ctx.save();ctx.translate(cx,cy);ctx.rotate(ang);
+    const rCl=19,rH=12,bondLen=36;
+    // Electron cloud — shifted toward Cl (electronegative)
+    const cloudShift=-12;// cloud center biased toward Cl
+    for(let layer=3;layer>=0;layer--){
+      const cg=ctx.createRadialGradient(cloudShift,0,0,cloudShift,0,rCl*1.8+layer*6);
+      cg.addColorStop(0,`rgba(62,122,84,${0.1-layer*0.015})`);
+      cg.addColorStop(0.6,`rgba(62,122,84,${0.04-layer*0.005})`);
+      cg.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=cg;ctx.beginPath();ctx.ellipse(cloudShift,0,rCl*2+layer*5,rH*1.8+layer*3,0,0,Math.PI*2);ctx.fill();
+    }
+    // Bond line
+    ctx.strokeStyle='rgba(100,80,50,.4)';ctx.lineWidth=2;
+    ctx.beginPath();ctx.moveTo(-bondLen/2,0);ctx.lineTo(bondLen/2,0);ctx.stroke();
+    // Cl atom (δ-)
+    const gCl=ctx.createRadialGradient(-bondLen/2-rCl*.25,-rCl*.25,2,-bondLen/2,0,rCl);
+    gCl.addColorStop(0,'#88C888');gCl.addColorStop(1,'#2A6A2A');
+    ctx.fillStyle=gCl;ctx.beginPath();ctx.arc(-bondLen/2,0,rCl,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='rgba(255,255,255,.85)';ctx.font='bold 11px Nunito';ctx.textAlign='center';ctx.fillText('Cl',-bondLen/2,4);
+    ctx.fillStyle='#A04040';ctx.font='bold 10px JetBrains Mono';ctx.fillText('δ−',-bondLen/2,-rCl-5);
+    // H atom (δ+)
+    const gH=ctx.createRadialGradient(bondLen/2-rH*.2,-rH*.2,1,bondLen/2,0,rH);
+    gH.addColorStop(0,'#E8E0D0');gH.addColorStop(1,'#8AAABB');
+    ctx.fillStyle=gH;ctx.beginPath();ctx.arc(bondLen/2,0,rH,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='rgba(60,60,80,.85)';ctx.font='bold 11px Nunito';ctx.textAlign='center';ctx.fillText('H',bondLen/2,4);
+    ctx.fillStyle='#2A6A98';ctx.font='bold 10px JetBrains Mono';ctx.fillText('δ+',bondLen/2,-rH-5);
+    ctx.restore();
+  }
+  // Attraction lines
+  const spacing2=W/3.5;
+  for(let i=0;i<2;i++){
+    const x1=W*0.18+i*spacing2+18,x2=W*0.18+(i+1)*spacing2-19;
+    const y=H*0.46,alpha=0.25+Math.sin(t*0.5)*0.15;
+    ctx.save();ctx.globalAlpha=alpha;ctx.strokeStyle='#B85030';ctx.lineWidth=1.8;ctx.setLineDash([4,5]);
+    ctx.beginPath();ctx.moveTo(x1,y);ctx.lineTo(x2,y);ctx.stroke();
+    ctx.setLineDash([]);ctx.restore();
+  }
+  ctx.fillStyle='rgba(107,91,69,.7)';ctx.font='600 11px Nunito';ctx.textAlign='center';
+  ctx.fillText('Electron cloud biased toward Cl → permanent δ+/δ− alignment',W/2,H-7);
+}
+
+// ─── Hydrogen bonding: 3 water molecules, H-bond bridges, electron clouds on O
+function animHB(t){
+  const c=setupIMFCanvas('cvs-hb');if(!c)return;
+  const{ctx,W,H}=c;warmBg(ctx,W,H);
+  const mols=[{cx:W*0.2,cy:H*0.45,a:-0.3},{cx:W*0.52,cy:H*0.52,a:0.22},{cx:W*0.8,cy:H*0.44,a:-0.28}];
+  const hbPulse=0.45+Math.sin(t*1.1)*0.3;
+  // Draw H-bonds first (behind molecules)
+  for(let i=0;i<2;i++){
+    const m1=mols[i],m2=mols[i+1];
+    ctx.save();ctx.globalAlpha=hbPulse;
+    ctx.strokeStyle='#A04040';ctx.lineWidth=2.5;ctx.setLineDash([5,4]);
+    // H-bond from H of m1 to O of m2
+    const hx1=m1.cx+Math.cos(m1.a)*30,hy1=m1.cy+Math.sin(m1.a)*30;
+    ctx.beginPath();ctx.moveTo(hx1,hy1);ctx.lineTo(m2.cx,m2.cy);ctx.stroke();
+    ctx.setLineDash([]);
+    // Label
+    ctx.fillStyle='#A04040';ctx.font='bold 10px Nunito';ctx.textAlign='center';
+    ctx.fillText('H-bond',(hx1+m2.cx)/2,(hy1+m2.cy)/2-9);
+    ctx.restore();
+  }
+  // Draw each water molecule
+  mols.forEach((m,mi)=>{
+    ctx.save();ctx.translate(m.cx,m.cy);ctx.rotate(m.a+Math.sin(t*0.6+mi)*0.04);
+    const rO=15,rH=9;
+    // Electron cloud (lone pairs) on O
+    for(let layer=2;layer>=0;layer--){
+      const cg=ctx.createRadialGradient(0,0,0,0,0,rO*2+layer*5);
+      cg.addColorStop(0,`rgba(160,64,64,${0.1-layer*0.02})`);cg.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=cg;ctx.beginPath();ctx.arc(0,0,rO*2.2+layer*4,0,Math.PI*2);ctx.fill();
+    }
+    // Lone pair dots
+    ctx.fillStyle='rgba(122,95,160,.7)';
+    ctx.beginPath();ctx.arc(-18,3,4,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.arc(-18,-3,4,0,Math.PI*2);ctx.fill();
+    // O-H bonds
+    const hAngles=[0.52,-0.52];
+    hAngles.forEach(ha=>{
+      const hx=Math.cos(ha)*28,hy=Math.sin(ha)*28;
+      ctx.strokeStyle='rgba(100,80,50,.45)';ctx.lineWidth=2.2;
+      ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(hx*.7,hy*.7);ctx.stroke();
+      const gH=ctx.createRadialGradient(hx-rH*.2,hy-rH*.2,1,hx,hy,rH);
+      gH.addColorStop(0,'#E8E0D0');gH.addColorStop(1,'#9AABBF');
+      ctx.fillStyle=gH;ctx.beginPath();ctx.arc(hx,hy,rH,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='rgba(50,50,70,.85)';ctx.font='bold 9px Nunito';ctx.textAlign='center';ctx.fillText('H',hx,hy+3.5);
+      ctx.fillStyle='#2A6A98';ctx.font='bold 8px JetBrains Mono';ctx.fillText('δ+',hx,hy-rH-4);
+    });
+    // O nucleus
+    const gO=ctx.createRadialGradient(-rO*.25,-rO*.25,2,0,0,rO);
+    gO.addColorStop(0,'#E89898');gO.addColorStop(1,'#8A3030');
+    ctx.fillStyle=gO;ctx.beginPath();ctx.arc(0,0,rO,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='rgba(255,255,255,.9)';ctx.font='bold 11px Nunito';ctx.textAlign='center';ctx.fillText('O',0,4);
+    ctx.fillStyle='#A04040';ctx.font='bold 8px JetBrains Mono';ctx.fillText('δ−',0,-rO-5);
+    ctx.restore();
+  });
+  ctx.fillStyle='rgba(107,91,69,.7)';ctx.font='600 11px Nunito';ctx.textAlign='center';
+  ctx.fillText('δ+ H attracted to lone pair (δ−) on O of adjacent water',W/2,H-7);
+}
+
+// ─── Network Covalent: animated lattice with electron density in bonds
+function animNC(t){
+  const c=setupIMFCanvas('cvs-nc');if(!c)return;
+  const{ctx,W,H}=c;warmBg(ctx,W,H);
+  const nodes=[],sp=46,offsetX=W/2-sp*1.5,offsetY=H/2-sp*.85;
+  const pts=[[0,0],[1,0],[2,0],[3,0],[0.5,.87],[1.5,.87],[2.5,.87],[1,1.73],[2,1.73]];
+  const bonds=[[0,1],[1,2],[2,3],[0,4],[1,4],[1,5],[2,5],[2,6],[3,6],[4,7],[5,7],[5,8],[6,8]];
+  pts.forEach(([px,py])=>nodes.push({x:offsetX+px*sp,y:offsetY+py*sp}));
+  // Draw bonds with animated electron density (pulsing blobs)
+  bonds.forEach(([a,b],bi)=>{
+    if(a>=nodes.length||b>=nodes.length)return;
+    const{x:x1,y:y1}=nodes[a],{x:x2,y:y2}=nodes[b];
+    // Bond track
+    ctx.strokeStyle='rgba(46,139,106,.5)';ctx.lineWidth=4;
+    ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+    // Electron pair: two dots travelling along bond
+    const midPhase=(t*0.8+bi*0.7)%(Math.PI*2);
+    const p1=0.35+Math.sin(midPhase)*0.12,p2=0.65+Math.sin(midPhase+0.3)*0.08;
+    [p1,p2].forEach(p=>{
+      const ex=x1+(x2-x1)*p,ey=y1+(y2-y1)*p;
+      ctx.fillStyle='rgba(46,80,60,.7)';ctx.beginPath();ctx.arc(ex,ey,3,0,Math.PI*2);ctx.fill();
+    });
+  });
+  // Draw atoms
+  nodes.forEach(({x,y},i)=>{
+    const pulse=1+Math.sin(t*0.6+i*0.5)*.04;
+    const r=10*pulse;
+    const g=ctx.createRadialGradient(x-r*.3,y-r*.3,1,x,y,r);
+    g.addColorStop(0,'#90C8B0');g.addColorStop(1,'#1A6A48');
+    ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='rgba(255,255,255,.9)';ctx.font='bold 9px Nunito';ctx.textAlign='center';ctx.fillText('C',x,y+3.5);
+  });
+  ctx.fillStyle='rgba(107,91,69,.7)';ctx.font='600 11px Nunito';ctx.textAlign='center';
+  ctx.fillText('Covalent bonds throughout — electron pairs shared between all atoms',W/2,H-7);
+}
+
+// ─── Delocalised Pi: graphite layers with flowing electron cloud animation
+function animPI(t){
+  const c=setupIMFCanvas('cvs-pi');if(!c)return;
+  const{ctx,W,H}=c;warmBg(ctx,W,H);
+  const layers=[{y:H*0.32,col:'#3A7CA8',pcol:[58,124,168]},{y:H*0.68,col:'#2E8B6A',pcol:[46,139,106]}];
+  layers.forEach((layer,li)=>{
+    const r=24,cr=9,cx=W/2;
+    // Hexagon vertices
+    const hx=[],hy=[];
+    for(let i=0;i<6;i++){const a=i*Math.PI/3;hx.push(cx+r*Math.cos(a));hy.push(layer.y+r*Math.sin(a));}
+    // Delocalised π cloud — animated wave
+    for(let cloudLayer=4;cloudLayer>=0;cloudLayer--){
+      const phaseShift=t*1.5+li*Math.PI+cloudLayer*0.2;
+      const cloudR=r*(1.3+cloudLayer*0.4)+Math.sin(phaseShift)*3;
+      const alpha=0.07-cloudLayer*0.01;
+      const[pr,pg,pb]=layer.pcol;
+      const cg=ctx.createRadialGradient(cx,layer.y,0,cx,layer.y,cloudR);
+      cg.addColorStop(0,`rgba(${pr},${pg},${pb},${alpha*2.5})`);
+      cg.addColorStop(0.6,`rgba(${pr},${pg},${pb},${alpha})`);
+      cg.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=cg;ctx.beginPath();ctx.arc(cx,layer.y,cloudR,0,Math.PI*2);ctx.fill();
+    }
+    // Moving electron "blobs" in π cloud (3 electrons moving around hexagon)
+    for(let e=0;e<3;e++){
+      const eAngle=t*1.8+e*(Math.PI*2/3)+li*1.2;
+      const eR=r*0.85;
+      const ex=cx+eR*Math.cos(eAngle),ey=layer.y+eR*Math.sin(eAngle);
+      const[pr,pg,pb]=layer.pcol;
+      ctx.fillStyle=`rgba(${pr},${pg},${pb},.7)`;ctx.beginPath();ctx.arc(ex,ey,4,0,Math.PI*2);ctx.fill();
+    }
+    // Bonds
+    for(let i=0;i<6;i++){
+      const alpha=0.55+Math.sin(t*1.2+i*0.5)*0.1;
+      ctx.strokeStyle=`rgba(${layer.pcol[0]},${layer.pcol[1]},${layer.pcol[2]},${alpha})`;ctx.lineWidth=2.5;
+      ctx.beginPath();ctx.moveTo(hx[i],hy[i]);ctx.lineTo(hx[(i+1)%6],hy[(i+1)%6]);ctx.stroke();
+    }
+    // Atoms
+    for(let i=0;i<6;i++){
+      const g=ctx.createRadialGradient(hx[i]-cr*.3,hy[i]-cr*.3,1,hx[i],hy[i],cr);
+      g.addColorStop(0,li===0?'#90B8D0':layer.col);g.addColorStop(1,li===0?'#2A5A80':'#1A6A48');
+      ctx.fillStyle=g;ctx.beginPath();ctx.arc(hx[i],hy[i],cr,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='rgba(255,255,255,.9)';ctx.font='bold 9px Nunito';ctx.textAlign='center';ctx.fillText('C',hx[i],hy[i]+3.5);
+    }
+    // Layer label
+    ctx.fillStyle=layer.col;ctx.font='700 10px Nunito';ctx.textAlign='left';
+    ctx.fillText(`Layer ${li+1}  (σ bonds + deloc. π)`,W*0.07,layer.y+4);
+  });
+  // VdW between layers — dashed arrows
+  const vdwAlpha=0.28+Math.sin(t*0.9)*0.18;
+  ctx.save();ctx.globalAlpha=vdwAlpha;
+  ctx.strokeStyle='#7A5FA0';ctx.lineWidth=1.5;ctx.setLineDash([3,5]);
+  ctx.beginPath();ctx.moveTo(W*0.72,H*0.35);ctx.lineTo(W*0.72,H*0.65);ctx.stroke();ctx.setLineDash([]);
+  ctx.fillStyle='#7A5FA0';ctx.font='700 10px Nunito';ctx.textAlign='center';ctx.fillText('VdW',W*0.79,(H*0.35+H*0.65)/2+4);
+  ctx.restore();
+  ctx.fillStyle='rgba(107,91,69,.7)';ctx.font='600 11px Nunito';ctx.textAlign='center';
+  ctx.fillText('π electrons delocalised in cloud above/below each layer',W/2,H-7);
+}
+
+// ─── Strength comparison: animated bars
+function animSTR(t){
+  const c=setupIMFCanvas('cvs-str');if(!c)return;
+  const{ctx,W,H}=c;warmBg(ctx,W,H);
+  const forces=[
+    {name:'Network Covalent',val:1.0,range:'200–500+ kJ/mol',col:'#2E8B6A',bg:'rgba(46,139,106,'},
+    {name:'Hydrogen Bonding',val:0.52,range:'10–40 kJ/mol',col:'#A04040',bg:'rgba(160,64,64,'},
+    {name:'Dipole–Dipole',val:0.26,range:'3–15 kJ/mol',col:'#B85030',bg:'rgba(184,80,48,'},
+    {name:'London Dispersion',val:0.10,range:'0.5–10 kJ/mol',col:'#3A7CA8',bg:'rgba(58,124,168,'},
+  ];
+  const barH=22,gap=8,startY=14,labelW=115;
+  forces.forEach((f,i)=>{
+    const y=startY+i*(barH+gap);
+    const maxBarW=W-labelW-20;
+    const fillW=maxBarW*f.val*(0.9+Math.sin(t*0.35+i*0.7)*0.04);
+    // Track
+    ctx.fillStyle='rgba(200,190,170,.45)';
+    ctx.beginPath();ctx.roundRect(labelW,y,maxBarW,barH,5);ctx.fill();
+    // Fill
+    ctx.fillStyle=f.bg+'0.18)';ctx.fillRect(labelW,y,fillW,barH);
+    ctx.strokeStyle=f.col;ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.roundRect(labelW,y,fillW,barH,5);ctx.stroke();
+    // Label
+    ctx.fillStyle=f.col;ctx.font='700 11px Nunito';ctx.textAlign='right';
+    ctx.fillText(f.name,labelW-8,y+barH/2+4.5);
+    // Range
+    ctx.fillStyle='rgba(107,91,69,.75)';ctx.font='500 10px JetBrains Mono';ctx.textAlign='left';
+    ctx.fillText(f.range,labelW+fillW+7,y+barH/2+3.5);
+  });
+  ctx.fillStyle='rgba(107,91,69,.65)';ctx.font='600 10px Nunito';ctx.textAlign='center';
+  ctx.fillText('Relative energy ranges (vary with molecular size)',W/2,H-5);
+}
+
+function startIMFAnimations(){
+  let startTime=null;
+  function loop(ts){
+    if(!startTime)startTime=ts;const t=(ts-startTime)/1000;
+    animLDF(t);animDD(t);animHB(t);animNC(t);animPI(t);animSTR(t);
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════════════════════════════
+vResize();gResize();bResize();
+buildMolGrid(4);updateVPanel();updateGiantPanel('diamond');
+buildElGrid();runBuilder();setDomain(4);
+requestAnimationFrame(vFrame);requestAnimationFrame(gFrame);requestAnimationFrame(bFrame);
+</script>
+</body>
+</html>
